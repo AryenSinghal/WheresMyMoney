@@ -6,7 +6,7 @@ function RecentReceipts() {
 
   return (
     <>
-      <div className="flex justify-center gap-4 mx-5">
+      <div className="flex flex-col items-center gap-4 mx-5 mt-4">
         {/* Check if there are any expenses and map over the top 3 */}
         {expenses.length > 0 ? (
           expenses.slice(0, 3).map((expense, index) => {
@@ -16,26 +16,21 @@ function RecentReceipts() {
             return (
               <div
                 key={expense.id || index}
-                className={`w-40 h-65 md:w-50 bg-${['blue', 'green', 'purple'][index]}-500 rounded-xl overflow-hidden flex flex-col items-center justify-center text-white font-bold relative`}
+                className="w-full md:w-3/4 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg p-4 flex flex-col gap-2 text-white"
               >
-                {/* Image inside each Box */}
-                <img
-                  src="https://via.placeholder.com/150"
-                  alt={`Box ${index + 1}`}
-                  className="absolute inset-0 w-full h-full object-cover opacity-50"
-                />
-
                 {/* Expense Details */}
-                <div className="absolute bottom-2 left-2 text-xl font-bold">
-                  <p>{expense.category}</p> {/* Displaying the expense name */}
-                  <p>${expense.Amount}</p> {/* Displaying the expense amount */}
-                  <p>{formattedDate}</p> {/* Displaying the formatted date */}
+                <div className="flex justify-between">
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-lg">{expense.category}</span>
+                    <span className="text-sm text-gray-400">{formattedDate}</span>
+                  </div>
+                  <span className="font-bold text-xl">${expense.Amount}</span>
                 </div>
               </div>
             );
           })
         ) : (
-          <p>No expenses found</p> // Show message if no expenses
+          <p className="text-white">No expenses found</p> // Show message if no expenses
         )}
       </div>
     </>
