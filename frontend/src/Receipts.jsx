@@ -1,5 +1,5 @@
 import './App.css';
-import Sidebar from './dashboardComponenets/Sidebar';
+import Sidebar from './dashboardComponents/Sidebar';
 import ReceiptsGrid from './ReceiptsGrid';
 import { useState, useEffect } from 'react'; // 🆕 Needed for fetching
 
@@ -40,7 +40,7 @@ function Receipts() {
       .then(data => setReceipts(data))
       .catch(error => console.error('Error adding receipt:', error));
   };
-  
+
 
   return (
     <>

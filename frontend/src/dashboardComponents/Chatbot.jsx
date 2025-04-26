@@ -53,7 +53,9 @@ function Chatbot() {
         />
         <button
           onClick={handleSendMessage}
-          className="bg-blue-500 text-white p-2 rounded-r-lg ml-2 transition-all duration-300 ease-in-out hover:bg-blue-600 active:bg-blue-900"
+          className="
+          bg-[#9B33E6] text-white p-2 ml-2 rounded-lg hover:bg-[#A64DFF] active:bg-[#B366FF]
+"
         >
           Send
         </button>

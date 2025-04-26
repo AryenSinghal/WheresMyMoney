@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 const ReceiptsGrid = ({ receipts }) => {
+
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReceipt, setSelectedReceipt] = useState(null);
@@ -16,6 +17,15 @@ const ReceiptsGrid = ({ receipts }) => {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedReceipt(null);
+  };
+
+  // Format the date to MM/DD/YYYY format
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
   };
 
   const filteredReceipts =
@@ -64,6 +74,7 @@ const ReceiptsGrid = ({ receipts }) => {
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white text-gray-800 text-sm font-semibold px-3 py-1 rounded-full shadow-md">
                 {receipt.category}
               </div>
+
             </div>
           ))}
         </div>
@@ -83,6 +94,7 @@ const ReceiptsGrid = ({ receipts }) => {
             <p className="text-gray-700 mb-2">Amount: ${selectedReceipt.amount.toFixed(2)}</p>
             <p className="text-gray-700 mb-2">Category: {selectedReceipt.category}</p>
             <p className="text-gray-500 text-sm">Date: {selectedReceipt.date}</p>
+
             <button
               onClick={closeModal}
               className="absolute top-3 right-3 text-gray-500 hover:text-black"
