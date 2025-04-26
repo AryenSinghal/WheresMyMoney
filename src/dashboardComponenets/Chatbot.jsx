@@ -48,7 +48,7 @@ function Chatbot() {
           type="text"
           value={userInput}
           onChange={handleInputChange}
-          className="w-full p-2 border rounded-l-lg"
+          className="w-full p-2 border rounded-l-lg bg-white"
           placeholder="Type a message..."
         />
         <button

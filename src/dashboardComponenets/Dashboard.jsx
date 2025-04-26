@@ -10,7 +10,7 @@ function Dashboard() {
         <div className="grid h-full w-full grid-cols-4 grid-rows-3 gap-3 p-15">
           
           <div className="col-span-1 row-span-3 rounded-xl bg-gradient-to-r from-green-500 to-green-700">
-            <h2 className="text-white font-bold text-xl p-4">Profile</h2>
+            <h2 className="text-white font-bold text-xl p-4">Welcome, Capy</h2>
             <ProfileDashboard/>
 
           </div>

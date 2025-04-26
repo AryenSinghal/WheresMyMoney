@@ -16,11 +16,16 @@ function ProfileDashboard() {
       </div>
 
       {/* Add new receipt button */}
-      <div className="flex justify-center mb-15 p-5">
-        <button className="bg-blue-500 text-white p-2 rounded-lg w-40 transition-all duration-300 ease-in-out hover:bg-blue-600 active:bg-blue-900">
-          Add New Receipt
-        </button>
-      </div>
+      <div className="flex flex-col items-center space-y-4 mb-15 p-5">
+  <button className="bg-blue-500 text-white p-2 rounded-lg w-full w-60 transition-all duration-300 ease-in-out hover:bg-blue-600 active:bg-blue-900">
+    Connect Email
+  </button>
+  <button className="bg-blue-500 text-white p-2 rounded-lg w-full w-60 transition-all duration-300 ease-in-out hover:bg-blue-600 active:bg-blue-900">
+    Add New Receipt
+  </button>
+</div>
+
+
     </div>
   );
 }

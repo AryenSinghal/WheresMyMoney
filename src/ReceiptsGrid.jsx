@@ -1,62 +1,89 @@
 import React, { useState } from 'react';
 
-const ReceiptsGrid = ({ images }) => {
-  // State for managing the modal visibility and the selected image
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+const allReceipts = [
+  { id: 1, category: 'Entertainment' },
+  { id: 2, category: 'Travel' },
+  { id: 3, category: 'Groceries' },
+  { id: 4, category: 'Dining' },
+  { id: 5, category: 'Utilities' },
+  { id: 6, category: 'Health' },
+  { id: 7, category: 'Travel' },
+];
 
-  // Function to handle image click and open the modal
-  const openModal = (image) => {
-    setSelectedImage(image);
+const categories = ['All', ...new Set(allReceipts.map(r => r.category))];
+
+const ReceiptsGrid = () => {
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedReceipt, setSelectedReceipt] = useState(null);
+
+  const openModal = (receipt) => {
+    setSelectedReceipt(receipt);
     setIsModalOpen(true);
   };
 
-  // Function to close the modal
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedImage(null);
+    setSelectedReceipt(null);
   };
+
+  const filteredReceipts =
+    selectedCategory === 'All'
+      ? allReceipts
+      : allReceipts.filter(r => r.category === selectedCategory);
 
   return (
     <>
-      {/* Grid of images */}
-      <div className="grid grid-cols-3 gap-6 p-6 px-15">
-        {images.map((image, index) => (
-          <div
-            key={index}
-            className="overflow-hidden rounded-xl bg-gradient-to-r from-teal-400 via-blue-500 to-indigo-600 shadow-lg p-4"
-            onClick={() => openModal(image)} // Open modal on click
+      {/* Filter bar */}
+      <div className="flex flex-wrap justify-center gap-3 p-4">
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setSelectedCategory(cat)}
+            className={`px-4 py-2 rounded-full font-medium text-sm transition-colors ${
+              selectedCategory === cat
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
           >
-            <img
-              src={image}
-              alt={`img-${index}`}
-              className="w-full object-cover mx-auto rounded-xl cursor-pointer"
-            />
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      {/* Grid of receipt cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6 px-15">
+        {filteredReceipts.map((receipt) => (
+          <div
+            key={receipt.id}
+            className="relative h-48 bg-gradient-to-r from-teal-400 via-blue-500 to-indigo-600 rounded-xl shadow-lg flex items-center justify-center text-white text-xl font-semibold cursor-pointer"
+            onClick={() => openModal(receipt)}
+          >
+            Receipt #{receipt.id}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white text-gray-800 text-sm font-semibold px-3 py-1 rounded-full shadow-md">
+              {receipt.category}
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Modal to display the clicked image */}
+      {/* Modal */}
       {isModalOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 transition-all duration-500 ease-out opacity-100"
-          onClick={closeModal} // Close modal on outside click
+          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+          onClick={closeModal}
         >
           <div
-            className="relative transform scale-95 opacity-0 transition-all duration-500 ease-in-out"
-            onClick={(e) => e.stopPropagation()} // Prevent modal from closing when clicking on the image itself
-            style={{ opacity: 1, transform: 'scale(1)' }}
+            className="bg-white p-6 rounded-xl shadow-lg relative w-80 text-center"
+            onClick={(e) => e.stopPropagation()}
           >
-            <img
-              src={selectedImage}
-              alt="Expanded view"
-              className="max-w-full max-h-[90vh] object-contain rounded-xl transition-all duration-500 ease-in-out transform scale-100 opacity-100"
-            />
+            <h2 className="text-xl font-bold mb-4">Receipt #{selectedReceipt.id}</h2>
+            <p className="text-gray-700">Category: {selectedReceipt.category}</p>
             <button
               onClick={closeModal}
-              className="absolute top-4 right-4 text-white text-xl bg-black rounded-full p-2"
+              className="absolute top-3 right-3 text-gray-500 hover:text-black"
             >
-              X
+              ✕
             </button>
           </div>
         </div>
