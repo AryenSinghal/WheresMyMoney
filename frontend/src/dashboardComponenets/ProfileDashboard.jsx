@@ -2,7 +2,7 @@ import SemiCircleProgress from './SemiCircleProgress';
 import capybara from '../assets/capybara.jpg'
 
 function ProfileDashboard() {
-  const spent = 75;
+  const spent = 216;
   const budget = 1000;
 
   return (
@@ -16,7 +16,7 @@ function ProfileDashboard() {
       <div className="border-t-2 border-white w-4/5 mx-auto mb-3" />
 
 
-      <h2 className="text-white font-bold text-l text-center ">My Budget</h2>
+      <h2 className="text-white font-bold text-l text-center ">My Monthly Budget</h2>
       {/* Progress Section */}
       <div className="flex justify-center flex-grow">
         <div className="flex flex-col items-center space-y-2">
@@ -27,11 +27,11 @@ function ProfileDashboard() {
 
       {/* Action Buttons */}
       <div className="flex flex-col items-center space-y-4 mb-15 p-5">
-        <button className="bg-blue-500 text-white p-2 rounded-lg lg:w-60 transition-all duration-300 ease-in-out hover:bg-blue-600 active:bg-blue-900">
-          Connect Email
+        <button className="bg-[#8200DB] text-white p-2 rounded-lg lg:w-60 transition-all duration-200 ease-in-out hover:bg-[#6a00b3] active:bg-[#5900a1]">
+          Take Picture of Receipt
         </button>
-        <button className="bg-blue-500 text-white p-2 lg:w-60 rounded-lg  transition-all duration-300 ease-in-out hover:bg-blue-600 active:bg-blue-900">
-          Add New Receipt
+        <button className="bg-[#8200DB] text-white p-2 lg:w-60 rounded-lg  transition-all duration-200 ease-in-out hover:bg-[#6a00b3] active:bg-[#5900a1]">
+          Upload Receipt
         </button>
       </div>
     </div>

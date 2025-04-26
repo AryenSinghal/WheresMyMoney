@@ -8,7 +8,9 @@ function Sidebar() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed top-4 left-4 z-50 bg-slate-700 text-white px-4 py-2 rounded-md hover:bg-slate-600 active:bg-slate-700"
+        className="fixed top-4 left-4 z-50 bg-white/10 backdrop-blur-md
+        transition-all duration-200 ease-in-out
+        border border-white/20 rounded-xl shadow-lg   text-white px-4 py-2 rounded-md hover:bg-purple-900 active:bg-purple-950"
       >
         Menu
       </button>
@@ -23,7 +25,7 @@ function Sidebar() {
       )}
 
       <div
-        className={`fixed top-0 left-0 h-full w-67 bg-slate-800 text-white p-6 z-50 transform transition-transform duration-300 ${
+        className={`fixed top-0 left-0 h-full w-67 bg-gradient-to-b from-[#3a0d68] via-[#2a0e4a] to-purple-700 text-white p-6 z-50 transform transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -35,7 +37,7 @@ function Sidebar() {
               className="hover:text-green-400"
               onClick={() => setIsOpen(false)}
             >
-             <button className=" text-white p-2 rounded-lg w-55 h-15 hover:bg-gray-600 active:bg-gray-900 outline transition-all duration-200 ease-in-out">
+             <button className=" text-white p-2 rounded-lg w-55 h-15 hover:bg-[#5900a1] active:bg-[#4a0080] outline transition-all duration-200 ease-in-out">
           Dashboard
         </button>
             </Link>
@@ -46,7 +48,7 @@ function Sidebar() {
               className="hover:text-green-400"
               onClick={() => setIsOpen(false)}
             >
-              <button className=" text-white p-2 rounded-lg w-55 h-15 transition-all duration-200 ease-in-out hover:bg-gray-600 active:bg-gray-900 outline">
+              <button className=" text-white p-2 rounded-lg w-55 h-15 hover:bg-[#5900a1] active:bg-[#4a0080] outline transition-all duration-200 ease-in-out">
           Receipts
         </button>
             </Link>

@@ -19,7 +19,7 @@ function SemiCircleProgress({ spent, budget }) {
         <path
           d="M 10 70 A 65 65 0 0 1 140 70"
           fill="none"
-          stroke="#3b82f6"
+          stroke="#8200DB"
           strokeWidth={stroke}
           strokeDasharray={circumference}
           strokeDashoffset={offset}
