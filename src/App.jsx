@@ -6,7 +6,8 @@ function App() {
   return (
     <>
       <Sidebar />
-      <div className="bg-slate-900 min-h-screen overflow-hidden">
+      <div className="bg-[linear-gradient(to_bottom_right,_#0f172a,_#1e293b,_#1e3a8a)]
+     min-h-screen overflow-hidden">
         {/* Title */}
         <h1 className="text-white font-bold text-3xl text-left mt-18 lg:ml-15 sm:ml-16 md:ml-15 ml-15 -mb-10">
           My Dashboard
