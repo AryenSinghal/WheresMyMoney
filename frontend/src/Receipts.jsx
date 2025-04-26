@@ -1,5 +1,5 @@
 import './App.css';
-import Sidebar from './dashboardComponenets/Sidebar';
+import Sidebar from './dashboardComponents/Sidebar';
 import ReceiptsGrid from './ReceiptsGrid';
 
 function Receipts() {

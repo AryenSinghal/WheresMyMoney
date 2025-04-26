@@ -1,7 +1,8 @@
-import ProfileDashboard from './ProfileDashboard'
-import StatsDashboard from './StatsDashboard';
-import Chatbot from './Chatbot';
-import RecentReceipts from './RecentReceipts'
+import ProfileDashboard from './ProfileDashboard.jsx'
+import StatsDashboard from './StatsDashboard.jsx';
+import Chatbot from './Chatbot.jsx';
+import RecentReceipts from './RecentReceipts.jsx'
+import React from 'react';
 
 
 function Dashboard() {
