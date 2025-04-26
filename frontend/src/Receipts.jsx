@@ -1,29 +1,61 @@
 import './App.css';
 import Sidebar from './dashboardComponents/Sidebar';
 import ReceiptsGrid from './ReceiptsGrid';
+import { useState, useEffect } from 'react'; // 🆕 Needed for fetching
 
 function Receipts() {
-  const receipts = [
-    { location: "Walmart", price: "$20.00" },
-    { location: "Target", price: "$35.50" },
-    { location: "Best Buy", price: "$120.75" },
-    { location: "Amazon", price: "$10.99" },
-    { location: "Costco", price: "$45.30" },
-    { location: "eBay", price: "$15.00" },
-    { location: "Home Depot", price: "$200.50" }
-  ];
+  const [receipts, setReceipts] = useState([]);
+
+  // Fetch receipts from Flask backend when page loads
+  useEffect(() => {
+    fetch('http://localhost:5001/expenses')
+      .then(response => response.json())
+      .then(data => setReceipts(data))
+      .catch(error => console.error('Error fetching receipts:', error));
+  }, []);
+
+  // Handle Add New Receipt (simple hardcoded example for now)
+  const handleAddReceipt = () => {
+    const newReceipt = {
+      name: "Test Store",
+      amount: 10.99,
+      category: "Misc",
+      date: new Date().toISOString().split('T')[0] // today's date
+    };
+  
+    fetch('http://localhost:5001/expenses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newReceipt),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to add receipt');
+        }
+        return fetch('http://localhost:5001/expenses');
+      })
+      .then(response => response.json())
+      .then(data => setReceipts(data))
+      .catch(error => console.error('Error adding receipt:', error));
+  };
+
 
   return (
     <>
       <Sidebar />
-      <div className="bg-slate-900 min-h-screen overflow-hidden px-8"> {/* Adjusted margin/padding here */}
+      <div className="bg-slate-900 min-h-screen overflow-hidden px-8">
         <h1 className="text-white font-bold text-3xl text-left mt-18 lg:ml-15 sm:ml-16 md:ml-15 ml-15 -mb-10">
           Receipts
         </h1>
-        <button className="bg-[#8200DB] text-white p-2 rounded-lg transition-all duration-300 ease-in-out hover:bg-[#6a00b3] active:bg-[#5900a1] w-40 float-right mr-15">
+        <button
+          className="bg-blue-500 text-white p-2 rounded-lg w-40 hover:bg-blue-600 active:bg-blue-900 float-right mr-15"
+          onClick={handleAddReceipt}
+        >
           Add New Receipt
         </button>
-        <div className='mt-10'>
+        <div className="mt-10">
           <ReceiptsGrid receipts={receipts} />
         </div>
       </div>

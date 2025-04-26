@@ -1,22 +1,13 @@
 import React, { useState } from 'react';
 
-// Add a date to each receipt
-const allReceipts = [
-  { id: 1, category: 'Entertainment', location: 'Walmart', price: '$20.00', date: '2023-04-12' },
-  { id: 2, category: 'Travel', location: 'Hotel ABC', price: '$150.00', date: '2023-03-28' },
-  { id: 3, category: 'Groceries', location: 'Whole Foods', price: '$35.50', date: '2023-04-02' },
-  { id: 4, category: 'Dining', location: 'Restaurant XYZ', price: '$40.00', date: '2023-04-10' },
-  { id: 5, category: 'Utilities', location: 'Electricity Bill', price: '$60.00', date: '2023-03-30' },
-  { id: 6, category: 'Health', location: 'Doctor Visit', price: '$120.00', date: '2023-04-05' },
-  { id: 7, category: 'Travel', location: 'Flight Ticket', price: '$200.00', date: '2023-04-08' },
-];
+const ReceiptsGrid = ({ receipts }) => {
 
-const categories = ['All', ...new Set(allReceipts.map(r => r.category))];
-
-const ReceiptsGrid = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReceipt, setSelectedReceipt] = useState(null);
+
+  // Extract unique categories from real receipts
+  const categories = ['All', ...new Set(receipts.map(r => r.category))];
 
   const openModal = (receipt) => {
     setSelectedReceipt(receipt);
@@ -39,8 +30,8 @@ const ReceiptsGrid = () => {
 
   const filteredReceipts =
     selectedCategory === 'All'
-      ? allReceipts
-      : allReceipts.filter(r => r.category === selectedCategory);
+      ? receipts
+      : receipts.filter(r => r.category === selectedCategory);
 
   return (
     <>
@@ -62,24 +53,32 @@ const ReceiptsGrid = () => {
       </div>
 
       {/* Grid of receipt cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6 px-15">
-        {filteredReceipts.map((receipt) => (
-          <div
-            key={receipt.id}
-            className="relative h-48 bg-gradient-to-r from-teal-400 via-blue-500 to-indigo-600 rounded-xl shadow-lg flex items-center justify-center text-white text-xl font-semibold cursor-pointer"
-            onClick={() => openModal(receipt)}
-          >
-            <div>
-              <h2 className='text-2xl -mt-6'>{receipt.location}</h2>
-              <p>Total Price: {receipt.price}</p>
-              <p>{formatDate(receipt.date)}</p> {/* Display the formatted date */}
+      {filteredReceipts.length === 0 ? (
+        // No receipts case
+        <div className="text-center text-white mt-20">
+          <div className="text-6xl mb-4">🧾</div>
+          <h2 className="text-2xl font-bold mb-2">No receipts yet!</h2>
+          <p className="text-md text-gray-300">Click "Add New Receipt" to create your first one.</p>
+        </div>
+      ) : (
+        // Normal grid if receipts exist
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6 px-15">
+          {filteredReceipts.map((receipt) => (
+            <div
+              key={receipt.id}
+              className="relative h-56 bg-gradient-to-r from-teal-400 via-blue-500 to-indigo-600 rounded-xl shadow-lg flex flex-col items-center justify-center text-white text-lg font-semibold cursor-pointer p-4"
+              onClick={() => openModal(receipt)}
+            >
+              <div className="mb-2 text-2xl font-bold">{receipt.name}</div>
+              <div className="text-white text-md">${receipt.amount.toFixed(2)}</div>
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white text-gray-800 text-sm font-semibold px-3 py-1 rounded-full shadow-md">
+                {receipt.category}
+              </div>
+
             </div>
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white text-gray-800 text-sm font-semibold px-3 py-1 rounded-full shadow-md">
-              {receipt.category}
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Modal */}
       {isModalOpen && selectedReceipt && (
@@ -91,10 +90,11 @@ const ReceiptsGrid = () => {
             className="bg-white p-6 rounded-xl shadow-lg relative w-80 text-center"
             onClick={(e) => e.stopPropagation()}
           >
-            <p className="text-gray-700">Category: {selectedReceipt.category}</p>
-            <p className="text-gray-700">Location: {selectedReceipt.location}</p>
-            <p className="text-gray-700">Total Price: {selectedReceipt.price}</p>
-            <p className="text-gray-700">Date: {formatDate(selectedReceipt.date)}</p> {/* Display date in modal */}
+            <h2 className="text-xl font-bold mb-2">{selectedReceipt.name}</h2>
+            <p className="text-gray-700 mb-2">Amount: ${selectedReceipt.amount.toFixed(2)}</p>
+            <p className="text-gray-700 mb-2">Category: {selectedReceipt.category}</p>
+            <p className="text-gray-500 text-sm">Date: {selectedReceipt.date}</p>
+
             <button
               onClick={closeModal}
               className="absolute top-3 right-3 text-gray-500 hover:text-black"
