@@ -3,6 +3,7 @@ import email
 from email.header import decode_header
 import datetime
 from bs4 import BeautifulSoup   # type: ignore
+import re
 
 # ====== Configuration ======
 IMAP_HOST = 'imap.gmail.com'
@@ -75,13 +76,15 @@ def get_receipts():
 
                         elif content_type == "text/plain":
                             body = part.get_payload(decode=True).decode()
-                            print(f"   📜 Text body snippet: {body[:200]}...\n")
+                            cleaned_body = clean_email_body(body)
+                            print(f"   📜 Text body snippet: {cleaned_body[:200]}...\n")
 
                         elif content_type == "text/html":
                             html = part.get_payload(decode=True).decode()
                             soup = BeautifulSoup(html, "html.parser")
                             text = soup.get_text()
-                            print(f"   🌐 HTML body (text extracted) snippet: {text[:200]}...\n")
+                            cleaned_text = clean_email_body(text)
+                            print(f"   🌐 HTML body (text extracted) snippet: {cleaned_text[:200]}...\n")
 
                 else:
                     body = msg.get_payload(decode=True).decode()
@@ -89,6 +92,31 @@ def get_receipts():
 
 
     mail.logout()
+# ====== Helper Functions ======
+def clean_email_body(text):
+    """
+    Cleans the raw text extracted from email bodies:
+    - Remove excessive newlines
+    - Remove strange unicode characters
+    - Collapse multiple spaces
+    - Trim leading/trailing whitespace
+    """
+    if not text:
+        return ""
+
+    # Remove strange unicode characters
+    text = text.encode("ascii", errors="ignore").decode()
+
+    # Remove excessive newlines
+    text = re.sub(r'\n+', '\n', text)
+
+    # Collapse multiple spaces into one
+    text = re.sub(r'[ \t]+', ' ', text)
+
+    # Trim leading/trailing whitespace
+    text = text.strip()
+
+    return text
 
 # ====== Run This ======
 if __name__ == "__main__":
