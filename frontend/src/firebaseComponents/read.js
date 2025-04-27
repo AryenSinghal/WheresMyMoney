@@ -9,7 +9,7 @@ export function readExpenses() {
     const fetchExpenses = async () => {
       try {
         const expensesRef = collection(db, 'expenses');
-        const q = query(expensesRef, orderBy('createdAt')); // Order by timestamp, most recent first
+        const q = query(expensesRef, orderBy('createdAt', 'desc')); // Order by timestamp, most recent first
 
         const querySnapshot = await getDocs(q);
         const expensesData = querySnapshot.docs.map(doc => ({

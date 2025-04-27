@@ -21,7 +21,7 @@ function RecentReceipts() {
                 {/* Expense Details */}
                 <div className="flex justify-between">
                   <div className="flex flex-col">
-                    <span className="font-semibold text-">{expense.category}</span>
+                    <span className="font-semibold text-">{expense.merchName}</span>
                     <span className="text-sm text-gray-400">{formattedDate}</span>
                   </div>
                   <span className="font-bold text-xl">${expense.Amount}</span>
