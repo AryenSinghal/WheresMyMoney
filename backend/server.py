@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app, origins="*", supports_credentials=True)
 
 # Initialize Firebase
-cred = credentials.Certificate('flaskPrivateKey.json')  # Update the path
+cred = credentials.Certificate('/Users/ridhisrikanth/Desktop/private_key/flaskPrivateKey.json')  # Update the path
 firebase_admin.initialize_app(cred)
 
 # Get Firestore client
