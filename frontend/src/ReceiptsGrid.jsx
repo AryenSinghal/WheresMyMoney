@@ -29,10 +29,8 @@ const ReceiptsGrid = () => {
   // Format the date to MM/DD/YYYY format
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${month}/${day}/${year}`;
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Intl.DateTimeFormat('en-US', options).format(date);
   };
 
   // Filter receipts based on selected category
@@ -53,6 +51,7 @@ const ReceiptsGrid = () => {
     if (receiptToDelete) {
       await deleteExpenseById(receiptToDelete);
     }
+    window.location.reload();
   
     // Remove the deleted receipt locally
     //const updatedReceipts = allReceipts.filter(r => r.id !== receiptToDelete);
@@ -109,7 +108,7 @@ const ReceiptsGrid = () => {
             {/* Receipt content - clicking opens modal */}
             <div onClick={() => openModal(receipt)} className="text-center cursor-pointer">
               <h2 className="text-2xl -mt-6">{receipt.merchName}</h2>
-              <p>Total Price: {receipt.Amount}</p>
+              <p>Price: ${receipt.Amount}</p>
               <p>{formatDate(receipt.createdAt.toDate())}</p>
             </div>
 

@@ -11,7 +11,12 @@ function RecentReceipts() {
         {expenses.length > 0 ? (
           expenses.slice(0, 3).map((expense, index) => {
             // Convert Firestore Timestamp to JavaScript Date
-            const formattedDate = new Date(expense.createdAt.seconds * 1000).toLocaleDateString('en-CA'); // YYYY-MM-DD format
+            const formattedDate = new Date(expense.createdAt.seconds * 1000).toLocaleDateString('en-CA', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            });
+             // YYYY-MM-DD format
 
             return (
               <div
