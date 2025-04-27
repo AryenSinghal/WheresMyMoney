@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { readExpenses } from './firebaseComponents/read';
+import { deleteExpenseById } from './firebaseComponents/delete'; 
 
 const ReceiptsGrid = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -45,12 +46,16 @@ const ReceiptsGrid = () => {
     setIsConfirmOpen(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     // Actually delete the receipt from the page (you can hook up Firebase here later)
     console.log('Deleting receipt with id:', receiptToDelete);
+
+    if (receiptToDelete) {
+      await deleteExpenseById(receiptToDelete);
+    }
   
     // Remove the deleted receipt locally
-    const updatedReceipts = allReceipts.filter(r => r.id !== receiptToDelete);
+    //const updatedReceipts = allReceipts.filter(r => r.id !== receiptToDelete);
     // You need a way to update allReceipts, we'll discuss that if needed
   
     setIsConfirmOpen(false);
