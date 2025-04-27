@@ -13,7 +13,7 @@ function Dashboard() {
       <>
         <div className="grid h-full w-full grid-cols-4 grid-rows-3 gap-3 p-15 ">
           
-          <div className="col-span-1 row-span-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 rounded-xl shadow-lg   drop-shadow-xl/25">
+          <div className="col-span-1 row-span-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 rounded-xl shadow-lg drop-shadow-xl/25">
             <h2 className="text-white font-bold text-xl p-4 ">Welcome, Capy B.</h2>
             <ProfileDashboard/>
 
@@ -31,7 +31,7 @@ function Dashboard() {
           </div>
   
           <div className="col-span-2 row-span-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-lg drop-shadow-xl/20 p-6">
-            <h2 className="text-white font-bold text-xl mb-6">Stats</h2>
+            <h2 className="text-white font-bold text-xl mb-6">Spending by Category</h2>
             <div className="flex justify-center items-center">
               <StatsDashboard/>
             </div>

@@ -40,7 +40,7 @@ function Sidebar() {
               className="hover:text-green-400"
               onClick={() => setIsOpen(false)}
             >
-              <button className={`text-white p-2 rounded-lg w-55 h-15 transition-all duration-200 ease-in-out ${isActive('/')}`}>
+              <button className={`text-white p-2 rounded-lg w-55 h-15 transition-all duration-200 ease-in-out hover:bg-purple-700 active:bg-purple-900 ${isActive('/')}`}>
                 My Dashboard
               </button>
             </Link>
@@ -51,7 +51,7 @@ function Sidebar() {
               className="hover:text-green-400"
               onClick={() => setIsOpen(false)}
             >
-              <button className={`text-white p-2 rounded-lg w-55 h-15 transition-all duration-200 ease-in-out ${isActive('/receipts')}`}>
+              <button className={`text-white p-2 rounded-lg w-55 h-15 transition-all duration-200 ease-in-out hover:bg-purple-700 active:bg-purple-900 ${isActive('/receipts')}`}>
                 Receipts
               </button>
             </Link>
@@ -92,13 +92,13 @@ function Sidebar() {
         <h2 className="text-2xl font-bold">Where's My Money?</h2>
         
         {/* Centered buttons: Dashboard and Receipts */}
-        <ul className="flex space-x-6 flex-grow justify-center ml-[-20px]"> {/* Shift left by 20px */}
+        <ul className="flex space-x-6 flex-grow justify-center">
           <li>
             <Link
               to="/"
               className="hover:text-green-400"
             >
-              <button className={`text-white p-2 rounded-lg transition-all duration-200 ease-in-out ${isActive('/')}`}>
+              <button className={`text-white p-2 rounded-lg transition-all duration-200 ease-in-out hover:bg-purple-700 active:bg-purple-900 ${isActive('/')}`}>
                 My Dashboard
               </button>
             </Link>
@@ -108,7 +108,7 @@ function Sidebar() {
               to="/receipts"
               className="hover:text-green-400"
             >
-              <button className={`text-white p-2 rounded-lg transition-all duration-200 ease-in-out ${isActive('/receipts')}`}>
+              <button className={`text-white p-2 rounded-lg transition-all duration-200 ease-in-out hover:bg-purple-700 active:bg-purple-900 ${isActive('/receipts')}`}>
                 Receipts
               </button>
             </Link>

@@ -78,7 +78,7 @@ function StatsDashboard() {
       {/* Pie Chart Section */}
       <div className="flex justify-center mt-4">
         <div className="flex">
-          <div className="w-96 h-96"> {/* Increase size of Pie chart */}
+          <div className="w-96 h-96 -m-25"> {/* Increase size of Pie chart */}
             <Pie data={chartData} options={options} />
           </div>
         </div>
