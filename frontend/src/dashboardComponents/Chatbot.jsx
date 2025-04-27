@@ -98,7 +98,7 @@ function Chatbot() {
                 onClick={() => {
                   setUserInput(question);
                 }}
-                className="bg-white/5 hover:bg-white/10 text-white/80 text-xs px-3 py-1.5 rounded-full border border-white/10 transition-all duration-200"
+                className="bg-white/5 hover:bg-white/10 cursor-pointer text-white/80 text-xs px-3 py-1.5 rounded-full border border-white/10 transition-all duration-200"
               >
                 {question}
               </button>
@@ -150,7 +150,7 @@ function Chatbot() {
           <button
             onClick={handleSendMessage}
             disabled={isLoading}
-            className={`p-3 bg-purple-500 text-white rounded-xl hover:bg-purple-600 active:bg-purple-700 transition-all duration-200 
+            className={`p-3 bg-purple-500 text-white rounded-xl hover:bg-purple-600 active:bg-purple-700 transition-all duration-200 cursor-pointer 
               ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
