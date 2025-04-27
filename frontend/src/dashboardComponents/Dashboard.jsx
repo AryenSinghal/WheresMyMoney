@@ -19,7 +19,7 @@ function Dashboard() {
 
           </div>
   
-          <div className="col-span-2 row-span-1 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-lg drop-shadow-xl p-6 flex flex-col items-center justify-center">
+          <div className="col-span-2 row-span-1 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-lg drop-shadow-xl ">
           <h2 className="text-white font-bold text-xl p-4">My Monthly Budget</h2>
           <SemiCircleProgress spent={spent} budget={budget} /> 
         </div>
@@ -44,4 +44,3 @@ function Dashboard() {
   }
   
   export default Dashboard;
-  

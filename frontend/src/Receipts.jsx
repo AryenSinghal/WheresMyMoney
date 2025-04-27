@@ -47,16 +47,7 @@ function Receipts() {
       
       <div className="bg-gradient-to-br from-black via-[#2a0e4a] to-purple-700 min-h-screen overflow-hidden">
       <Sidebar />
-        <h1 className="text-white font-bold text-3xl text-left mt-18 lg:ml-15 sm:ml-16 md:ml-15 ml-15 -mb-10">
-          Receipts
-        </h1>
-        <button
-          className="bg-blue-500 text-white p-2 rounded-lg w-40 hover:bg-blue-600 active:bg-blue-900 float-right mr-15"
-          onClick={handleAddReceipt}
-        >
-          Add New Receipt
-        </button>
-        <div className="mt-10">
+        <div className="mt-5">
           <ReceiptsGrid receipts={receipts} />
         </div>
       </div>

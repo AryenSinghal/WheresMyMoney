@@ -92,7 +92,7 @@ function Sidebar() {
         <h2 className="text-2xl font-bold">Where's My Money?</h2>
         
         {/* Centered buttons: Dashboard and Receipts */}
-        <ul className="flex space-x-6 flex-grow justify-center">
+        <ul className="flex space-x-6 flex-grow justify-center ml-[-20px]"> {/* Shift left by 20px */}
           <li>
             <Link
               to="/"
