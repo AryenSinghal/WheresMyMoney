@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from email_fetcher.fetching import get_receipt_emails
+import datetime
 
 load_dotenv()
 
@@ -283,6 +284,180 @@ def fetch_email_receipts():
         }), 200
     except Exception as e:
         print(f"Error fetching email receipts: {str(e)}")
+        return jsonify({"error": f"Server error: {str(e)}"}), 500
+
+@app.route('/chatbot', methods=['POST'])
+def chatbot():
+    try:
+        data = request.get_json()
+        user_message = data.get('message', '')
+        conversation_history = data.get('history', [])
+        
+        if not user_message:
+            return jsonify({"error": "Message is required"}), 400
+        
+        # Get user's financial data from Firestore
+        expenses_ref = db.collection('expenses').stream()
+        expenses_data = [expense.to_dict() for expense in expenses_ref]
+        
+        # Calculate financial insights
+        total_spent = sum(float(expense.get('Amount', 0)) for expense in expenses_data)
+        
+        # Get spending by category
+        category_spending = {}
+        for expense in expenses_data:
+            category = expense.get('category', 'Uncategorized')
+            amount = float(expense.get('Amount', 0))
+            category_spending[category] = category_spending.get(category, 0) + amount
+        
+        # Sort categories by spending
+        sorted_categories = sorted(category_spending.items(), key=lambda x: x[1], reverse=True)
+        
+        # Calculate monthly stats
+        current_month_expenses = []
+        current_month = datetime.datetime.now().month
+        current_year = datetime.datetime.now().year
+        
+        for expense in expenses_data:
+            if 'createdAt' in expense and expense['createdAt']:
+                expense_date = expense['createdAt'].date()
+                if expense_date.month == current_month and expense_date.year == current_year:
+                    current_month_expenses.append(expense)
+        
+        monthly_spent = sum(float(expense.get('Amount', 0)) for expense in current_month_expenses)
+        
+        # Calculate average transaction
+        avg_transaction = total_spent / len(expenses_data) if expenses_data else 0
+        
+        # Analyze spending by merchant for specific advice
+        merchant_spending = {}
+        for expense in expenses_data:
+            merchant = expense.get('merchName', 'Unknown')
+            amount = float(expense.get('Amount', 0))
+            category = expense.get('category', 'Uncategorized')
+            
+            if merchant not in merchant_spending:
+                merchant_spending[merchant] = {
+                    'total': 0,
+                    'count': 0,
+                    'category': category,
+                    'transactions': []
+                }
+            
+            merchant_spending[merchant]['total'] += amount
+            merchant_spending[merchant]['count'] += 1
+            merchant_spending[merchant]['transactions'].append({
+                'amount': amount,
+                'date': expense.get('createdAt'),
+                'category': category
+            })
+        
+        # Sort merchants by total spending
+        sorted_merchants = sorted(
+            merchant_spending.items(), 
+            key=lambda x: x[1]['total'], 
+            reverse=True
+        )
+        
+        # Identify recurring expenses
+        recurring_expenses = []
+        for merchant, data in merchant_spending.items():
+            if data['count'] >= 3:  # Consider recurring if visited 3+ times
+                recurring_expenses.append({
+                    'merchant': merchant,
+                    'frequency': data['count'],
+                    'avg_amount': data['total'] / data['count'],
+                    'total_spent': data['total'],
+                    'category': data['category']
+                })
+        
+        # Get budget from the message context (default to 1000)
+        monthly_budget = 1000
+        budget_remaining = monthly_budget - monthly_spent
+        budget_percentage = (monthly_spent / monthly_budget) * 100 if monthly_budget > 0 else 0
+        
+        # Create conversation context
+        conversation_context = "\n".join([
+            f"{msg['sender'].capitalize()}: {msg['text']}" 
+            for msg in conversation_history[-5:]
+        ])
+        
+        # Create detailed financial context
+        financial_context = f"""
+        User's Financial Overview:
+        - Total amount spent: ${total_spent:.2f}
+        - Monthly spending (current month): ${monthly_spent:.2f}
+        - Monthly budget: ${monthly_budget}
+        - Budget remaining: ${budget_remaining:.2f}
+        - Budget usage percentage: {budget_percentage:.1f}%
+        - Average transaction size: ${avg_transaction:.2f}
+        - Number of transactions: {len(expenses_data)}
+        
+        Spending by category (top 3):
+        {chr(10).join([f"- {cat}: ${amount:.2f}" for cat, amount in sorted_categories[:3]])}
+        
+        Top merchants by spending:
+        {chr(10).join([f"- {merch}: ${data['total']:.2f} ({data['count']} visits, category: {data['category']})" for merch, data in sorted_merchants[:5]])}
+        
+        Recurring expenses:
+        {chr(10).join([f"- {item['merchant']}: {item['frequency']} times, avg ${item['avg_amount']:.2f} per visit" for item in recurring_expenses[:5]])}
+        
+        Recent transactions (last 5):
+        {chr(10).join([f"- {exp.get('merchName', 'Unknown')}: ${exp.get('Amount', 0)} ({exp.get('category', 'Uncategorized')})" for exp in expenses_data[-5:]])}
+        """
+        
+        # Create prompt for Gemini
+        prompt = f"""
+        You are a helpful financial assistant chatbot named FinBot. Based on the user's financial data below, their conversation history, and current question, provide personalized, specific advice.
+        
+        Your goal is to give specific, actionable advice including:
+        1. Suggesting cheaper alternatives to specific products/services they currently use
+        2. Identifying where they can save money based on their actual merchants/brands
+        3. Recommending specific changes to their spending habits
+        4. Pointing out recurring expenses that could be reduced or eliminated
+        5. Suggesting specific budget-friendly alternatives based on their spending category
+        
+        For example:
+        - If they spend a lot at Starbucks, suggest making coffee at home or cheaper coffee shops
+        - If they frequently use Uber, suggest public transit or carpooling alternatives
+        - If they shop at premium grocery stores, suggest discount alternatives
+        - If they have recurring subscriptions, suggest reviewing if they're all needed
+        
+        CONVERSATION HISTORY:
+        {conversation_context}
+        
+        FINANCIAL DATA:
+        {financial_context}
+        
+        CURRENT USER QUESTION: {user_message}
+        
+        Provide specific, actionable advice mentioning actual merchants and alternatives. Keep your response to 2-3 sentences maximum.
+        """
+        
+        # Initialize Gemini model
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        
+        # Generate response
+        response = model.generate_content(prompt)
+        bot_response = response.text.strip()
+        
+        return jsonify({
+            "response": bot_response,
+            "financial_summary": {
+                "total_spent": total_spent,
+                "monthly_spent": monthly_spent,
+                "monthly_budget": monthly_budget,
+                "budget_remaining": budget_remaining,
+                "budget_percentage": budget_percentage,
+                "avg_transaction": avg_transaction,
+                "top_categories": sorted_categories[:3] if sorted_categories else [],
+                "top_merchants": [(merch, data['total']) for merch, data in sorted_merchants[:3]],
+                "recurring_expenses": recurring_expenses[:3]
+            }
+        }), 200
+        
+    except Exception as e:
+        print(f"Error in chatbot: {str(e)}")
         return jsonify({"error": f"Server error: {str(e)}"}), 500
 
 if __name__ == '__main__':
