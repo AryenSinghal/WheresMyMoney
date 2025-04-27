@@ -1,13 +1,32 @@
 import React, { useState } from 'react';
+import { readExpenses } from '../firebaseComponents/read';
 
 function SemiCircleProgress({ spent, initialBudget }) {
+  const expenses = readExpenses();
   const [budget, setBudget] = useState(initialBudget);  // State to track the budget
   const [isEditing, setIsEditing] = useState(false);   // State to toggle edit mode
 
-  const percentage = budget ? Math.min((spent / budget) * 100, 100) : 0;
   const radius = 150;  // Increased radius for a larger circle
   const stroke = 20;   // Adjusted stroke width
   const circumference = Math.PI * radius;
+
+  // Get the current date and extract the current month and year
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth(); // 0-11 (January - December)
+  const currentYear = currentDate.getFullYear();
+
+  // Filter expenses to only include those from the current month
+  const monthlyExpenses = expenses.filter((expense) => {
+    const expenseDate = expense.createdAt.toDate(); // Convert Firebase Timestamp to JavaScript Date
+    return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
+  });
+
+  // Calculate total amount spent this month
+  const totalAmountSpent = monthlyExpenses.reduce((total, expense) => {
+    return total + (Number(expense.Amount) || 0); // Add the expense amount, defaulting to 0 if not defined
+  }, 0);
+  
+  const percentage = budget ? Math.min((totalAmountSpent / budget) * 100, 100) : 0
   const offset = circumference - (percentage / 100) * circumference;
 
   // Function to handle the budget change
@@ -63,7 +82,7 @@ function SemiCircleProgress({ spent, initialBudget }) {
 
       {/* Inner Labels (centered in arc) */}
       <div className="absolute top-16 left-1/2 transform -translate-x-1/2 text-center text-white">
-        <div className="text-3xl font-medium mt-5">${spent} spent</div>
+        <div className="text-3xl font-medium mt-5">${totalAmountSpent} spent</div>
         <div className="text-md">{Math.round(percentage)}%</div>
       </div>
 
