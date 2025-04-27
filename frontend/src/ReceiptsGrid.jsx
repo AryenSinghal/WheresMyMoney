@@ -100,10 +100,13 @@ const ReceiptsGrid = () => {
             {/* Delete button */}
             <button
               onClick={() => handleDelete(receipt.id)}
-              className="absolute top-2 right-2 bg-white/20 hover:bg-white/40 text-white text-sm px-2 py-1 rounded-full hover:bg-opacity-40 transition"
+              className="absolute top-2 right-2 bg-white/20 hover:bg-white/40 text-white text-sm p-2 rounded-full transition"
             > 
-              Delete
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M10 2h4a1 1 0 011 1v1H9V3a1 1 0 011-1z" />
+              </svg>
             </button>
+
 
             {/* Receipt content - clicking opens modal */}
             <div onClick={() => openModal(receipt)} className="text-center cursor-pointer">
