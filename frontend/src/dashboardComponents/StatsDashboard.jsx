@@ -9,13 +9,24 @@ ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale,
 function StatsDashboard() {
   const expenses = readExpenses();
 
-  // Calculate total amount spent
-  const totalAmountSpent = expenses.reduce((total, expense) => {
+  // Get the current date and extract the current month and year
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth(); // 0-11 (January - December)
+  const currentYear = currentDate.getFullYear();
+
+  // Filter expenses to only include those from the current month
+  const monthlyExpenses = expenses.filter((expense) => {
+    const expenseDate = expense.createdAt.toDate(); // Convert Firebase Timestamp to JavaScript Date
+    return expenseDate.getMonth() === currentMonth && expenseDate.getFullYear() === currentYear;
+  });
+
+  // Calculate total amount spent this month
+  const totalAmountSpent = monthlyExpenses.reduce((total, expense) => {
     return total + (Number(expense.Amount) || 0); // Add the expense amount, defaulting to 0 if not defined
   }, 0);
 
-  // Create data for Pie chart: category-wise spending
-  const categoryData = expenses.reduce((acc, expense) => {
+  // Create data for Pie chart: category-wise spending this month
+  const categoryData = monthlyExpenses.reduce((acc, expense) => {
     const category = expense.category || 'Uncategorized';
     const amount = Number(expense.Amount) || 0;
     if (acc[category]) {
@@ -71,7 +82,6 @@ function StatsDashboard() {
       },
     },
   };
-  
 
   return (
     <>
