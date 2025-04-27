@@ -6,6 +6,13 @@ import os
 import google.generativeai as genai
 from PIL import Image
 import io
+import json
+from dotenv import load_dotenv
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from email_fetcher.fetching import get_receipt_emails
+
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -164,6 +171,118 @@ def process_receipt():
         
     except Exception as e:
         print(f"Error processing receipt: {str(e)}")
+        return jsonify({"error": f"Server error: {str(e)}"}), 500
+
+@app.route('/process-email-receipts', methods=['POST'])
+def process_email_receipts():
+    try:
+        # Fetch receipt emails
+        email_receipts = get_receipt_emails()
+        
+        if not email_receipts:
+            return jsonify({"message": "No receipt emails found"}), 200
+        
+        processed_receipts = []
+        
+        # Initialize Gemini model
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        
+        for email in email_receipts:
+            # Combine email subject and body for analysis
+            email_content = f"""
+Subject: {email['subject']}
+From: {email['from']}
+Date: {email['date']}
+Body: {email['body'] or email['html_body']}
+"""
+            
+            # Create prompt for Gemini
+            prompt = f"""Analyze this email receipt and extract the following information:
+            1. Merchant name (store or business name)
+            2. Total amount (the final amount paid)
+            3. Categorize the purchase into one of these categories: {', '.join(CATEGORIES)}
+            
+            Email content:
+            {email_content}
+            
+            Respond ONLY with a JSON object in this exact format:
+            {{
+                "merchant_name": "extracted merchant name",
+                "amount": numeric_value,
+                "category": "category from the list"
+            }}
+            
+            Do not include any other text or explanation."""
+            
+            try:
+                # Generate response from Gemini
+                response = model.generate_content(prompt)
+                
+                # Clean and parse response
+                response_text = response.text.strip()
+                if response_text.startswith('```json'):
+                    response_text = response_text.split('```json')[1]
+                if response_text.startswith('```'):
+                    response_text = response_text[3:]
+                if response_text.endswith('```'):
+                    response_text = response_text[:-3]
+                
+                extracted_data = json.loads(response_text.strip())
+                
+                # Validate data
+                merchant_name = extracted_data.get('merchant_name', '')
+                amount = float(extracted_data.get('amount', 0))
+                category = extracted_data.get('category', 'Miscellaneous')
+                
+                # Ensure category is valid
+                if category not in CATEGORIES:
+                    category = 'Miscellaneous'
+                
+                # Save to Firebase
+                new_expense = {
+                    "merchName": merchant_name,
+                    "Amount": amount,
+                    "category": category,
+                    "createdAt": firestore.SERVER_TIMESTAMP,
+                    "source": "email",
+                    "emailSubject": email['subject'],
+                    "emailDate": email['date']
+                }
+                
+                doc_ref = db.collection('expenses').document()
+                doc_ref.set(new_expense)
+                
+                processed_receipts.append({
+                    "merchant_name": merchant_name,
+                    "amount": amount,
+                    "category": category,
+                    "id": doc_ref.id,
+                    "email_subject": email['subject']
+                })
+                
+            except Exception as parse_error:
+                print(f"Error parsing email receipt: {parse_error}")
+                continue
+        
+        return jsonify({
+            "message": f"Processed {len(processed_receipts)} email receipts",
+            "data": processed_receipts
+        }), 201
+        
+    except Exception as e:
+        print(f"Error processing email receipts: {str(e)}")
+        return jsonify({"error": f"Server error: {str(e)}"}), 500
+
+@app.route('/fetch-email-receipts', methods=['GET'])
+def fetch_email_receipts():
+    try:
+        email_receipts = get_receipt_emails()
+        return jsonify({
+            "message": f"Found {len(email_receipts)} receipt emails",
+            "receipts": [{"subject": email['subject'], "from": email['from'], "date": email['date']} for email in email_receipts]
+        }), 200
+    except Exception as e:
+        print(f"Error fetching email receipts: {str(e)}")
         return jsonify({"error": f"Server error: {str(e)}"}), 500
 
 if __name__ == '__main__':

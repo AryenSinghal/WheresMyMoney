@@ -4,3 +4,4 @@ firebase-admin
 google-generativeai
 Pillow
 python-dotenv
+beautifulsoup4

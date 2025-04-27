@@ -5,6 +5,7 @@ function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isEmailFetching, setIsEmailFetching] = useState(false);
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path ? 'bg-[#5900a1] text-white' : '';
@@ -36,6 +37,30 @@ function Sidebar() {
       alert('Error uploading receipt: ' + error.message);
     } finally {
       setIsLoading(false);
+      setIsDropdownOpen(false);
+    }
+  };
+
+  const fetchEmailReceipts = async () => {
+    setIsEmailFetching(true);
+    try {
+      const response = await fetch('http://localhost:5001/process-email-receipts', {
+        method: 'POST'
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        alert(`${data.message}\nProcessed ${data.data.length} receipts from email.`);
+        // Refresh the page to show new expenses
+        window.location.reload();
+      } else {
+        alert(`Error: ${data.error}`);
+      }
+    } catch (error) {
+      alert('Error fetching email receipts: ' + error.message);
+    } finally {
+      setIsEmailFetching(false);
       setIsDropdownOpen(false);
     }
   };
@@ -87,7 +112,7 @@ function Sidebar() {
               className="hover:text-green-400"
               onClick={() => setIsOpen(false)}
             >
-              <button className={`text-white p-2 rounded-lg w-55 h-15 transition-all duration-200 ease-in-out hover:bg-purple-700 active:bg-purple-900 ${isActive('/')}`}>
+              <button className={`text-white p-2 rounded-lg w-55 h-15 transition-all duration-200 ease-in-out ${isActive('/')}`}>
                 My Dashboard
               </button>
             </Link>
@@ -98,7 +123,7 @@ function Sidebar() {
               className="hover:text-green-400"
               onClick={() => setIsOpen(false)}
             >
-              <button className={`text-white p-2 rounded-lg w-55 h-15 transition-all duration-200 ease-in-out hover:bg-purple-700 active:bg-purple-900 ${isActive('/receipts')}`}>
+              <button className={`text-white p-2 rounded-lg w-55 h-15 transition-all duration-200 ease-in-out ${isActive('/receipts')}`}>
                 Receipts
               </button>
             </Link>
@@ -107,9 +132,9 @@ function Sidebar() {
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               className="text-white p-2 rounded-lg w-55 h-15 hover:bg-[#5900a1] active:bg-[#4a0080] outline transition-all duration-200 ease-in-out"
-              disabled={isLoading}
+              disabled={isLoading || isEmailFetching}
             >
-              {isLoading ? 'Processing...' : '+ Add Receipt'}
+              {isLoading || isEmailFetching ? 'Processing...' : '+ Add Receipt'}
             </button>
             {isDropdownOpen && (
               <div className="absolute top-full right-0 bg-white text-black p-4 rounded-lg shadow-lg mt-2 w-48 z-60">
@@ -130,6 +155,15 @@ function Sidebar() {
                       Take Picture
                     </button>
                   </li>
+                  <li>
+                    <button 
+                      onClick={fetchEmailReceipts} 
+                      className="hover:text-green-400"
+                      disabled={isEmailFetching}
+                    >
+                      {isEmailFetching ? 'Fetching...' : 'Fetch from Email'}
+                    </button>
+                  </li>
                 </ul>
               </div>
             )}
@@ -147,8 +181,7 @@ function Sidebar() {
       <div className="hidden md:flex items-center justify-between text-white p-4 z-50 border border-white/20">
         <h2 className="text-2xl font-bold">Where's My Money?</h2>
         
-        {/* Centered buttons: Dashboard and Receipts */}
-        <ul className="flex space-x-6 flex-grow justify-center">
+        <ul className="flex space-x-6 flex-grow justify-center ml-[-20px]">
           <li>
             <Link to="/" className="hover:text-green-400">
               <button className={`text-white p-2 rounded-lg transition-all duration-200 ease-in-out ${isActive('/')}`}>
@@ -169,9 +202,9 @@ function Sidebar() {
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             className="text-white p-2 rounded-lg w-35 h-10 hover:bg-[#5900a1] active:bg-[#4a0080] outline transition-all duration-200 ease-in-out"
-            disabled={isLoading}
+            disabled={isLoading || isEmailFetching}
           >
-            {isLoading ? 'Processing...' : '+ Add Receipt'}
+            {isLoading || isEmailFetching ? 'Processing...' : '+ Add Receipt'}
           </button>
 
           {isDropdownOpen && (
@@ -191,6 +224,15 @@ function Sidebar() {
                 <li>
                   <button onClick={openCamera} className="hover:text-green-400">
                     Take Picture
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={fetchEmailReceipts} 
+                    className="hover:text-green-400"
+                    disabled={isEmailFetching}
+                  >
+                    {isEmailFetching ? 'Fetching...' : 'Fetch from Email'}
                   </button>
                 </li>
               </ul>
