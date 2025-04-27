@@ -82,7 +82,7 @@ function SemiCircleProgress({ spent, initialBudget }) {
 
       {/* Inner Labels (centered in arc) */}
       <div className="absolute top-16 left-1/2 transform -translate-x-1/2 text-center text-white">
-        <div className="text-3xl font-medium mt-5">${totalAmountSpent} spent</div>
+        <div className="text-3xl font-medium mt-5">${Number(totalAmountSpent).toFixed(2)} spent</div>
         <div className="text-md">{Math.round(percentage)}%</div>
       </div>
 
