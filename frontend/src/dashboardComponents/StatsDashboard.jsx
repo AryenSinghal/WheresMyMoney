@@ -49,34 +49,82 @@ function StatsDashboard() {
     ],
   };
 
-  // Pie chart options with data labels (percentages)
+  // Improved pie chart options with better percentage labels
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
+    layout: {
+      padding: 20, // Add padding around the chart
+    },
     plugins: {
       datalabels: {
         formatter: (value, context) => {
           const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
-          const percentage = ((value / total) * 100).toFixed(2); // Calculate percentage
-          return `${percentage}%`; // Display percentage
+          const percentage = ((value / total) * 100).toFixed(1); // Calculate percentage to 1 decimal place
+          
+          // Only show percentage label for segments that are large enough
+          // This helps prevent overlapping on small segments
+          return percentage > 5 ? `${percentage}%` : '';
+        },
+        color: (context) => {
+          // Dynamically determine color based on background color brightness
+          const value = context.dataset.data[context.dataIndex];
+          const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+          const percentage = (value / total) * 100;
+          
+          // For very small segments, hide the label by matching the background color
+          if (percentage < 5) {
+            return context.dataset.backgroundColor[context.dataIndex];
+          }
+          
+          return '#FFFFFF'; // White text for most segments
         },
         font: {
-          color: '#FFFFFF', // Ensure the text is white
-          weight: 'normal', // Make text not bold
-          size: 18, // Increase font size
+          weight: 'bold',
+          size: 14,
         },
-        anchor: 'center', // Anchor at the center
-        align: 'center', // Align the label in the center
-        offset: 0, // Adjust this value to ensure the text is correctly positioned
+        textStrokeColor: '#000000', // Add black outline to text
+        textStrokeWidth: 1,        // Width of the outline
+        // Adjust position for better visibility
+        anchor: 'center',
+        align: (context) => {
+          const value = context.dataset.data[context.dataIndex];
+          const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+          const percentage = (value / total) * 100;
+          
+          // For larger segments, place label in center
+          // For medium segments, move label slightly outward
+          return percentage > 15 ? 'center' : 'end';
+        },
+        offset: (context) => {
+          const value = context.dataset.data[context.dataIndex];
+          const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+          const percentage = (value / total) * 100;
+          
+          // For medium segments, push label outward slightly
+          return percentage > 15 ? 0 : 20;
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            const label = context.label || '';
+            const value = context.raw || 0;
+            const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+            const percentage = ((value / total) * 100).toFixed(2);
+            return `${label}: ${value} (${percentage}%)`;
+          }
+        }
       },
       legend: {
-        position: 'right', // Position the legend to the right
+        position: 'right',
         labels: {
-          color: '#FFFFFF', // Make legend text white
+          color: '#FFFFFF',
           boxWidth: 20,
-          padding: 20,
+          padding: 15,
           font: {
-            weight: 'bold', // Make legend text bold
-            size: 16, // Increase legend text size
+            weight: 'bold',
+            size: 14,
           },
         },
       },
@@ -88,7 +136,7 @@ function StatsDashboard() {
       {/* Pie Chart Section */}
       <div className="flex justify-center mt-4">
         <div className="flex">
-          <div className="w-96 h-96 -m-25"> {/* Increase size of Pie chart */}
+          <div className="w-100 h-100 -mt-25"> {/* Maintain appropriate chart size */}
             <Pie data={chartData} options={options} />
           </div>
         </div>
