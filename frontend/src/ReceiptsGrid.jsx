@@ -91,7 +91,7 @@ const ReceiptsGrid = () => {
         {filteredReceipts.map((receipt) => (
           <div
             key={receipt.id}
-            className="relative h-48 bg-gradient-to-r from-teal-400 via-blue-500 to-indigo-600 rounded-xl shadow-lg flex items-center justify-center text-white text-xl font-semibold"
+            className="relative h-48 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl shadow-lg drop-shadow-xl/25 rounded-xl shadow-lg flex items-center justify-center text-white text-xl font-semibold"
           >
             {/* Delete button */}
             <button
