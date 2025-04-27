@@ -132,7 +132,7 @@ const ReceiptsGrid = () => {
           >
             <p className="text-gray-700">Location: {selectedReceipt.merchName}</p>
             <p className="text-gray-700">Category: {selectedReceipt.category}</p>
-            <p className="text-gray-700">Total Price: {selectedReceipt.Amount}</p>
+            <p className="text-gray-700">Price: ${selectedReceipt.Amount}</p>
             <p className="text-gray-700">Date: {formatDate(selectedReceipt.createdAt.toDate())}</p>
             <button
               onClick={closeModal}
