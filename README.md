@@ -1,7 +1,7 @@
 # Where's My Money 💸
 
 > **How to Run**  
-> Run Frontend: cd `frontend`, `npm install`, `npm run dev`  
+> Run Frontend: `cd frontend`, `npm install`, `npm run dev`  
 > Run Flask: cd `backend`, `python server.py` 
 
 ## Inspiration
