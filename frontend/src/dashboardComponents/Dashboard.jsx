@@ -19,10 +19,11 @@ function Dashboard() {
 
           </div>
   
-          <div className="col-span-2 row-span-1 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 rounded-xl shadow-lg   drop-shadow-xl/25">
-            <h2 className="text-white font-bold text-xl p-4">Stats</h2>
-            <StatsDashboard/>
-          </div>
+          <div className="col-span-2 row-span-1 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-lg drop-shadow-xl p-6 flex flex-col items-center justify-center">
+          <h2 className="text-white font-bold text-xl p-4">My Monthly Budget</h2>
+          <SemiCircleProgress spent={spent} budget={budget} /> 
+        </div>
+
   
           <div className="col-span-1 row-span-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 rounded-xl shadow-lg  drop-shadow-xl/20">
             <h2 className="text-white font-bold text-xl p-4">Chatbot</h2>
@@ -30,9 +31,9 @@ function Dashboard() {
           </div>
   
           <div className="col-span-2 row-span-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-lg drop-shadow-xl/20 p-6">
-            <h2 className="text-white font-bold text-xl mb-6">My Monthly Budget</h2>
+            <h2 className="text-white font-bold text-xl mb-6">Stats</h2>
             <div className="flex justify-center items-center">
-              <SemiCircleProgress spent={spent} budget={budget} className="w-96 h-96" /> {/* Bigger size */}
+              <StatsDashboard/>
             </div>
           </div>
 

@@ -1,19 +1,13 @@
 import React, { useState } from 'react';
 
-function SemiCircleProgress({ spent, initialBudget }) {
-  const [budget, setBudget] = useState(initialBudget);  // State to track the budget
+function SemiCircleProgress({ spent, budget }) {
   const [isEditing, setIsEditing] = useState(false);   // State to toggle edit mode
 
   const percentage = Math.min((spent / budget) * 100, 100);
-  const radius = 150;  // Increased radius for a larger circle
-  const stroke = 20;   // Adjusted stroke width
+  const radius = 60;  // Adjusted radius to fit better inside the grid
+  const stroke = 8;   // Reduced stroke width for smaller size
   const circumference = Math.PI * radius;
   const offset = circumference - (percentage / 100) * circumference;
-
-  // Function to handle the budget change
-  const handleBudgetChange = (e) => {
-    setBudget(e.target.value);  // Update the budget state
-  };
 
   // Function to toggle the edit mode
   const toggleEdit = () => {
@@ -21,18 +15,18 @@ function SemiCircleProgress({ spent, initialBudget }) {
   };
 
   return (
-    <div className="relative w-[350px] h-[250px] -mt-5">
-      <svg width="350" height="250" viewBox="0 0 350 200"> 
- 
+    <div className="relative w-full h-full flex justify-center items-center">
+      {/* SVG Circle */}
+      <svg width="120" height="120" viewBox="0 0 150 150">
         <path
-          d="M 25 175 A 150 150 0 0 1 325 175"
+          d="M 25 125 A 80 80 0 0 1 125 125"
           fill="none"
           stroke="#e5e7eb"
           strokeWidth={stroke}
         />
         {/* Progress Arc */}
         <path
-          d="M 25 175 A 150 150 0 0 1 325 175"
+          d="M 25 125 A 80 80 0 0 1 125 125"
           fill="none"
           stroke="#8200DB"
           strokeWidth={stroke}
@@ -43,17 +37,17 @@ function SemiCircleProgress({ spent, initialBudget }) {
         {/* Left Label - 0 */}
         <text
           x="25"
-          y="190"
-          fontSize="20"
+          y="135"
+          fontSize="12"
           fill="#ffffff"
         >
           $0
         </text>
         {/* Right Label - Total Budget */}
         <text
-          x="325"
-          y="190"
-          fontSize="20"
+          x="125"
+          y="135"
+          fontSize="12"
           fill="#ffffff"
           textAnchor="end"
         >
@@ -62,27 +56,27 @@ function SemiCircleProgress({ spent, initialBudget }) {
       </svg>
 
       {/* Inner Labels (centered in arc) */}
-      <div className="absolute top-16 left-1/2 transform -translate-x-1/2 text-center text-white">
-        <div className="text-lg font-medium mt-5">${spent} spent</div>
-        <div className="text-md">{Math.round(percentage)}%</div>
+      <div className="absolute text-center text-white">
+        <div className="text-sm font-medium">${spent} spent</div>
+        <div className="text-sm">{Math.round(percentage)}%</div>
       </div>
 
       {/* Edit Budget Button */}
       <button
         onClick={toggleEdit}
-        className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white bg-white/20 hover:bg-opacity-30 px-4 py-2 rounded-lg text-md"
-        >
+        className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-white bg-white/20 hover:bg-opacity-30 px-3 py-1 rounded-lg text-sm"
+      >
         {isEditing ? "Save" : "Edit Budget"}
       </button>
 
       {/* Budget Input when editing */}
       {isEditing && (
-        <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 text-center text-white">
+        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-center text-white">
           <input
             type="number"
             value={budget}
-            onChange={handleBudgetChange}
-            className="bg-gray-800 text-white p-3 rounded-lg w-50"
+            onChange={(e) => budget = e.target.value}
+            className="bg-gray-800 text-white p-2 rounded-lg w-[80px]"
           />
         </div>
       )}
