@@ -10,27 +10,36 @@ function LineChartDashboard() {
 
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth(); // 0 = Jan, 11 = Dec
 
-  // Filter expenses from THIS year
-  const yearlyExpenses = expenses.filter((expense) => {
-    const expenseDate = expense.createdAt.toDate();
-    return expenseDate.getFullYear() === currentYear;
-  });
+  // Calculate the past 12 months
+  const past12Months = Array.from({ length: 12 }, (_, i) => {
+    const date = new Date(currentYear, currentMonth - i, 1);
+    return {
+      year: date.getFullYear(),
+      month: date.getMonth(),
+      label: date.toLocaleString('default', { month: 'long' }),
+    };
+  }).reverse();
 
   // Initialize array for each month's spending
   const monthlyTotals = new Array(12).fill(0);
 
-  yearlyExpenses.forEach((expense) => {
-    const date = expense.createdAt.toDate();
+  expenses.forEach((expense) => {
+    const expenseDate = expense.createdAt.toDate();
     const amount = Number(expense.Amount) || 0;
-    const month = date.getMonth(); // 0 = Jan, 11 = Dec
-    monthlyTotals[month] += amount;
+
+    past12Months.forEach((monthData, index) => {
+      if (
+        expenseDate.getFullYear() === monthData.year &&
+        expenseDate.getMonth() === monthData.month
+      ) {
+        monthlyTotals[index] += amount;
+      }
+    });
   });
 
-  const labels = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
+  const labels = past12Months.map((monthData) => monthData.label);
 
   const chartData = {
     labels: labels,
