@@ -70,8 +70,8 @@ function SemiCircleProgress({ spent, initialBudget }) {
       {/* Edit Budget Button */}
       <button
         onClick={toggleEdit}
-        className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg text-md"
-      >
+        className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white bg-white/20 hover:bg-opacity-30 px-4 py-2 rounded-lg text-md"
+        >
         {isEditing ? "Save" : "Edit Budget"}
       </button>
 

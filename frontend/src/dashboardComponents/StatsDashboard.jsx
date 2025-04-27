@@ -3,7 +3,7 @@ import { readExpenses } from '../firebaseComponents/read';
 function StatsDashboard() {
   const expenses = readExpenses(); 
   const totalAmountSpent = expenses.reduce((total, expense) => {
-    return total + (expense.Amount || 0); // Add the expense amount, defaulting to 0 if not defined
+    return total + (Number(expense.Amount) || 0); // Add the expense amount, defaulting to 0 if not defined
   }, 0);
 
     return (
