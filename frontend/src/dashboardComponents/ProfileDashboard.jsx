@@ -1,5 +1,5 @@
 import RecentReceipts from './RecentReceipts.jsx'
-import capybara from '../assets/capybara.jpg'
+import swampy from '../assets/swampy.png'
 
 function ProfileDashboard() {
   return (
@@ -9,7 +9,7 @@ function ProfileDashboard() {
         <div className="relative mx-auto w-32 h-32 mb-6">
           <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 animate-pulse"></div>
           <img 
-            src={capybara}  
+            src={swampy}  
             alt="Profile Picture" 
             className="absolute inset-1 w-30 h-30 rounded-full object-cover border-4 border-[#0F0B15]"
           />
@@ -17,7 +17,7 @@ function ProfileDashboard() {
         
         {/* Profile Info */}
         <div className="text-center mb-6">
-          <h3 className="text-white font-bold text-xl mb-1">Capy B.</h3>
+          <h3 className="text-white font-bold text-xl mb-1">Swampy</h3>
           <p className="text-white/60 text-sm">Premium Member</p>
         </div>
         

@@ -25,7 +25,7 @@ function Dashboard() {
             <div className="h-full flex flex-col">
               <div className="p-6 border-b border-white/10">
                 <h2 className="text-2xl font-bold text-white bg-clip-text">
-                  Welcome back, Capy
+                  Welcome back, Swampy
                 </h2>
               </div>
               <div className="flex-1 overflow-hidden">
