@@ -28,7 +28,7 @@ def get_receipts():
     mail.select("inbox")
 
     # Search for emails from the past N days with 'receipt' in subject
-    since_date = get_date_range(days=7)
+    since_date = get_date_range(days=30)
     query = f'(SINCE {since_date} SUBJECT "receipt")'
     status, messages = mail.search(None, query)
 
