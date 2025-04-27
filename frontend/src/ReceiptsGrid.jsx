@@ -5,6 +5,9 @@ const ReceiptsGrid = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReceipt, setSelectedReceipt] = useState(null);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [receiptToDelete, setReceiptToDelete] = useState(null);
+
 
   // Fetch expenses from the database using readExpenses hook
   const allReceipts = readExpenses();
@@ -37,6 +40,33 @@ const ReceiptsGrid = () => {
       ? allReceipts
       : allReceipts.filter(r => r.category === selectedCategory);
 
+  const handleDelete = (id) => {
+    setReceiptToDelete(id);
+    setIsConfirmOpen(true);
+  };
+
+  const confirmDelete = () => {
+    // Actually delete the receipt from the page (you can hook up Firebase here later)
+    console.log('Deleting receipt with id:', receiptToDelete);
+  
+    // Remove the deleted receipt locally
+    const updatedReceipts = allReceipts.filter(r => r.id !== receiptToDelete);
+    // You need a way to update allReceipts, we'll discuss that if needed
+  
+    setIsConfirmOpen(false);
+    setReceiptToDelete(null);
+  
+    // ⚡️ NOTE: If allReceipts comes from a real Firebase hook, 
+    // you should instead call your delete API and let the hook refresh the list.
+  };
+  
+  const cancelDelete = () => {
+    setIsConfirmOpen(false);
+    setReceiptToDelete(null);
+  };
+  
+      
+
   return (
     <>
       {/* Filter bar */}
@@ -61,15 +91,25 @@ const ReceiptsGrid = () => {
         {filteredReceipts.map((receipt) => (
           <div
             key={receipt.id}
-            className="relative h-48 bg-gradient-to-r from-teal-400 via-blue-500 to-indigo-600 rounded-xl shadow-lg flex items-center justify-center text-white text-xl font-semibold cursor-pointer"
-            onClick={() => openModal(receipt)}
+            className="relative h-48 bg-gradient-to-r from-teal-400 via-blue-500 to-indigo-600 rounded-xl shadow-lg flex items-center justify-center text-white text-xl font-semibold"
           >
-            <div>
+            {/* Delete button */}
+            <button
+              onClick={() => handleDelete(receipt.id)}
+              className="absolute top-2 right-2 bg-white/20 hover:bg-white/40 text-white text-sm px-2 py-1 rounded-full hover:bg-opacity-40 transition"
+            > 
+              Delete
+            </button>
+
+            {/* Receipt content - clicking opens modal */}
+            <div onClick={() => openModal(receipt)} className="text-center cursor-pointer">
               <h2 className="text-2xl -mt-6">{receipt.merchName}</h2>
               <p>Total Price: {receipt.Amount}</p>
-              <p>{formatDate(receipt.createdAt.toDate())}</p> {/* Display formatted date */}
+              <p>{formatDate(receipt.createdAt.toDate())}</p>
             </div>
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white text-gray-800 text-sm font-semibold px-3 py-1 rounded-full shadow-md">
+
+            {/* Category tag */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 hover:bg-white text-gray-800 text-sm font-semibold px-3 py-1 rounded-full shadow-md">
               {receipt.category}
             </div>
           </div>
@@ -96,6 +136,27 @@ const ReceiptsGrid = () => {
             >
               ✕
             </button>
+          </div>
+        </div>
+      )}
+      {isConfirmOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-xl shadow-lg relative w-80 text-center">
+            <p className="text-gray-800 text-lg mb-4">Are you sure you want to delete this receipt?</p>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={confirmDelete}
+                className="bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded"
+              >
+                Yes
+              </button>
+              <button
+                onClick={cancelDelete}
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+              >
+                No
+              </button>
+            </div>
           </div>
         </div>
       )}
