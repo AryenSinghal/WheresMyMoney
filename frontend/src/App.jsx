@@ -5,20 +5,16 @@ import Sidebar from './dashboardComponents/Sidebar';
 function App() {
   return (
     <>
-      
-      <div className="bg-gradient-to-br from-black via-[#2a0e4a] to-purple-700 min-h-screen overflow-hidden">
-      <Sidebar />
-        {/* Title and Buttons Container */}
-        <div className="flex items-center justify-between mt-13 lg:mt-5 lg:ml-15 ml-10 -mb-10 px-5">
-          {/* <h1 className="text-white font-bold text-3xl text-left">
-            My Dashboard
-          </h1> */}
-          
-        </div>
-
-        {/* Dashboard container */}
-        <div className="w-screen h-screen flex items-center justify-center">
-          <Dashboard />
+      <div className="bg-[#0F0B15] min-h-screen overflow-hidden relative">
+        {/* Background gradient effects */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-indigo-900/20 to-pink-900/20" />
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjMDAwMDAwMTAiPjwvcmVjdD4KPC9zdmc+')] opacity-20" />
+        
+        <div className="relative z-10">
+          <Sidebar />
+          <div className="w-screen h-screen flex items-center justify-center pt-16">
+            <Dashboard />
+          </div>
         </div>
       </div>
     </>

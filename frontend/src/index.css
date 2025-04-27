@@ -1,5 +1,56 @@
 @import "tailwindcss";
 
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(147, 51, 234, 0.5);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(147, 51, 234, 0.7);
+}
+
+/* Gradient text animation */
+@keyframes gradient-text {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.gradient-text {
+    background: linear-gradient(45deg, #a855f7, #6366f1, #ec4899, #a855f7);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-text 8s ease infinite;
+}
+
+/* Glass effect enhancements */
+.glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 /* Safari safe area support */
 .safe-area-inset-top {
     padding-top: env(safe-area-inset-top, 0px);
@@ -45,6 +96,21 @@
     animation: pulse 1s infinite;
 }
 
+/* Subtle glow effect for interactive elements */
+.glow-on-hover:hover {
+    box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);
+}
+
+/* Modern card hover effects */
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
 /* Mobile optimizations */
 @media (max-width: 768px) {
     .camera-interface {
@@ -70,6 +136,7 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
+    background: #0F0B15;
 }
 
 /* Prevent iOS bounce scrolling on camera interface */
@@ -78,4 +145,33 @@ body {
     overflow: hidden;
     width: 100%;
     height: 100%;
+}
+
+/* Modern button transitions */
+button {
+    transition: all 0.2s ease;
+}
+
+/* Input focus styles */
+input:focus {
+    box-shadow: 0 0 0 2px rgba(147, 51, 234, 0.5);
+}
+
+/* Loading animation */
+@keyframes loading {
+    0% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.3;
+    }
+}
+
+.loading {
+    animation: loading 1.5s infinite;
 }

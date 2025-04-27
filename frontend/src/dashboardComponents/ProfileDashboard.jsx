@@ -1,30 +1,51 @@
-
 import RecentReceipts from './RecentReceipts.jsx'
 import capybara from '../assets/capybara.jpg'
 
 function ProfileDashboard() {
   return (
-    <div className="flex flex-col justify-between h-full">
-
-      <img 
-        src={capybara}  
-        alt="Profile Picture" 
-        className="w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 rounded-full object-cover mx-auto mb-5"
-      />
-      <div className="border-t-2 border-white w-4/5 mx-auto mb-3" />
-
-
-      <h2 className="text-white font-bold text-l text-center ">Recent Receipts</h2>
-      
-      <div className="flex justify-center flex-grow">
-        <div className="flex flex-col items-center space-y-2">
-          
-          <RecentReceipts/>
+    <div className="flex flex-col h-full">
+      <div className="p-6">
+        {/* Profile Picture with Gradient Border */}
+        <div className="relative mx-auto w-32 h-32 mb-6">
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 animate-pulse"></div>
+          <img 
+            src={capybara}  
+            alt="Profile Picture" 
+            className="absolute inset-1 w-30 h-30 rounded-full object-cover border-4 border-[#0F0B15]"
+          />
+        </div>
+        
+        {/* Profile Info */}
+        <div className="text-center mb-6">
+          <h3 className="text-white font-bold text-xl mb-1">Capy B.</h3>
+          <p className="text-white/60 text-sm">Premium Member</p>
+        </div>
+        
+        {/* Quick Stats */}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="bg-white/5 rounded-xl p-3 text-center">
+            <p className="text-white/60 text-sm mb-1">Total Spent</p>
+            <p className="text-white font-bold text-lg">$1,234</p>
+          </div>
+          <div className="bg-white/5 rounded-xl p-3 text-center">
+            <p className="text-white/60 text-sm mb-1">Transactions</p>
+            <p className="text-white font-bold text-lg">24</p>
+          </div>
         </div>
       </div>
 
-      {/* Action Buttons */}
+      {/* Divider */}
+      <div className="px-6">
+        <div className="border-t border-white/10" />
+      </div>
 
+      {/* Recent Receipts Section */}
+      <div className="flex-1 overflow-auto">
+        <div className="p-6">
+          <h2 className="text-white font-bold text-lg mb-4">Recent Receipts</h2>
+          <RecentReceipts/>
+        </div>
+      </div>
     </div>
   );
 }

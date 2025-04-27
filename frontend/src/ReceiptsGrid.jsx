@@ -9,7 +9,6 @@ const ReceiptsGrid = () => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [receiptToDelete, setReceiptToDelete] = useState(null);
 
-
   // Fetch expenses from the database using readExpenses hook
   const allReceipts = readExpenses();
   
@@ -45,36 +44,24 @@ const ReceiptsGrid = () => {
   };
 
   const confirmDelete = async () => {
-    // Actually delete the receipt from the page (you can hook up Firebase here later)
-    console.log('Deleting receipt with id:', receiptToDelete);
-
     if (receiptToDelete) {
       await deleteExpenseById(receiptToDelete);
     }
     window.location.reload();
   
-    // Remove the deleted receipt locally
-    //const updatedReceipts = allReceipts.filter(r => r.id !== receiptToDelete);
-    // You need a way to update allReceipts, we'll discuss that if needed
-  
     setIsConfirmOpen(false);
     setReceiptToDelete(null);
-  
-    // ⚡️ NOTE: If allReceipts comes from a real Firebase hook, 
-    // you should instead call your delete API and let the hook refresh the list.
   };
   
   const cancelDelete = () => {
     setIsConfirmOpen(false);
     setReceiptToDelete(null);
   };
-  
-      
 
   return (
-    <>
-      {/* Filter bar */}
-      <div className="flex flex-wrap justify-center gap-3 p-4">
+    <div className="container mx-auto">
+      {/* Filter bar with proper margin-top */}
+      <div className="flex flex-wrap justify-center gap-3 p-4 mb-4">
         {categories.map((cat) => (
           <button
             key={cat}
@@ -82,7 +69,7 @@ const ReceiptsGrid = () => {
             className={`px-4 py-2 rounded-full font-medium text-sm transition-colors cursor-pointer ${
               selectedCategory === cat
                 ? 'bg-purple-600 hover:bg-purple-400 active:bg-purple-800 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-400 active:bg-gray-600'
+                : 'bg-white/10 text-white/70 hover:bg-white/20 active:bg-white/30'
             }`}
           >
             {cat}
@@ -106,7 +93,6 @@ const ReceiptsGrid = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M10 2h4a1 1 0 011 1v1H9V3a1 1 0 011-1z" />
               </svg>
             </button>
-
 
             {/* Receipt content - clicking opens modal */}
             <div onClick={() => openModal(receipt)} className="text-center cursor-pointer">
@@ -167,7 +153,7 @@ const ReceiptsGrid = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
