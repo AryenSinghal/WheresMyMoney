@@ -1,7 +1,12 @@
 import RecentReceipts from './RecentReceipts.jsx'
 import capybara from '../assets/capybara.jpg'
+import { readExpenses } from '../firebaseComponents/read';
 
 function ProfileDashboard() {
+  const expenses = readExpenses();
+  const totalAmountSpent = expenses.reduce((total, expense) => {
+    return total + (Number(expense.Amount) || 0); // Add the expense amount, defaulting to 0 if not defined
+  }, 0);
   return (
     <div className="flex flex-col h-full">
       <div className="p-6">
@@ -25,11 +30,11 @@ function ProfileDashboard() {
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="bg-white/5 rounded-xl p-3 text-center">
             <p className="text-white/60 text-sm mb-1">Total Spent</p>
-            <p className="text-white font-bold text-lg">$1,234</p>
+            <p className="text-white font-bold text-lg">${Number(totalAmountSpent).toFixed()}</p>
           </div>
           <div className="bg-white/5 rounded-xl p-3 text-center">
             <p className="text-white/60 text-sm mb-1">Transactions</p>
-            <p className="text-white font-bold text-lg">24</p>
+            <p className="text-white font-bold text-lg">{expenses.length}</p>
           </div>
         </div>
       </div>
