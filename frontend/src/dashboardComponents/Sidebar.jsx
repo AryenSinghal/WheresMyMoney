@@ -1,19 +1,18 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import CameraCapture from './CameraCapture';
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailFetching, setIsEmailFetching] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path ? 'bg-[#5900a1] text-white' : '';
 
-  const handleFileUpload = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-
+  const handleFileUpload = async (file) => {
     setIsLoading(true);
     const formData = new FormData();
     formData.append('image', file);
@@ -28,7 +27,6 @@ function Sidebar() {
       
       if (response.ok) {
         alert(`Receipt processed successfully!\nMerchant: ${data.data.merchant_name}\nAmount: $${data.data.amount}\nCategory: ${data.data.category}`);
-        // Refresh the page to show new expense
         window.location.reload();
       } else {
         alert(`Error: ${data.error}`);
@@ -38,6 +36,14 @@ function Sidebar() {
     } finally {
       setIsLoading(false);
       setIsDropdownOpen(false);
+      setShowCamera(false);
+    }
+  };
+
+  const handleFileInputChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      handleFileUpload(file);
     }
   };
 
@@ -52,7 +58,6 @@ function Sidebar() {
       
       if (response.ok) {
         alert(`${data.message}\nProcessed ${data.data.length} receipts from email.`);
-        // Refresh the page to show new expenses
         window.location.reload();
       } else {
         alert(`Error: ${data.error}`);
@@ -65,20 +70,9 @@ function Sidebar() {
     }
   };
 
-  const openCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      // You would typically show a camera preview and capture functionality here
-      // For now, we'll just use a regular file input
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*';
-      input.capture = 'environment';
-      input.onchange = handleFileUpload;
-      input.click();
-    } catch (error) {
-      alert('Camera access denied. Please use file upload instead.');
-    }
+  const openCamera = () => {
+    setShowCamera(true);
+    setIsDropdownOpen(false);
   };
 
   return (
@@ -144,7 +138,7 @@ function Sidebar() {
                       <input
                         type="file"
                         accept="image/*"
-                        onChange={handleFileUpload}
+                        onChange={handleFileInputChange}
                         className="hidden"
                       />
                       Upload Picture
@@ -215,7 +209,7 @@ function Sidebar() {
                     <input
                       type="file"
                       accept="image/*"
-                      onChange={handleFileUpload}
+                      onChange={handleFileInputChange}
                       className="hidden"
                     />
                     Upload Picture
@@ -240,6 +234,14 @@ function Sidebar() {
           )}
         </div>
       </div>
+
+      {/* Camera Component */}
+      {showCamera && (
+        <CameraCapture
+          onCapture={handleFileUpload}
+          onClose={() => setShowCamera(false)}
+        />
+      )}
     </>
   );
 }
