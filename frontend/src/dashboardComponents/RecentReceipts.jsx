@@ -16,12 +16,12 @@ function RecentReceipts() {
             return (
               <div
                 key={expense.id || index}
-                className="w-full md:w-3/4 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg p-4 flex flex-col gap-2 text-white"
+                className="w-full md:w-60 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg p-4 flex flex-col gap-2 text-white "
               >
                 {/* Expense Details */}
                 <div className="flex justify-between">
                   <div className="flex flex-col">
-                    <span className="font-semibold text-lg">{expense.category}</span>
+                    <span className="font-semibold text-">{expense.category}</span>
                     <span className="text-sm text-gray-400">{formattedDate}</span>
                   </div>
                   <span className="font-bold text-xl">${expense.Amount}</span>
