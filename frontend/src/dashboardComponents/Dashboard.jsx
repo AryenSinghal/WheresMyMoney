@@ -40,9 +40,6 @@ function Dashboard() {
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold text-white">Monthly Budget</h2>
                 <div className="flex items-center gap-2">
-                  <span className="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm font-medium">
-                    Active
-                  </span>
                 </div>
               </div>
               <SemiCircleProgress spent={spent} initialBudget={budget} /> 
