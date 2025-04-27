@@ -43,12 +43,12 @@ function Dashboard() {
           <div className="col-span-2 row-span-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 shadow-lg drop-shadow-xl/20 p-6 relative">
             {/* 🧠 Title and Toggle Button Row */}
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-white font-bold text-xl">Spending by Category</h2>
+              <h2 className="text-white font-bold text-3xl">Stats</h2>
               <button 
                 onClick={toggleChart}
-                className="text-white bg-blue-500 hover:bg-blue-700 font-bold py-1 px-3 rounded"
+                className="text-white bg-white/20 hover:bg-white/10 font-bold py-1 px-3 rounded"
               >
-                {isPieChart ? 'Switch to Line' : 'Switch to Pie'}
+                {isPieChart ? 'View to Yearly Spending' : 'View to Monthly Spending'}
               </button>
             </div>
 
