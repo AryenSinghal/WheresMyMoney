@@ -40,6 +40,7 @@ function StatsDashboard() {
 
   // Pie chart options with data labels (percentages)
   const options = {
+    responsive: true,
     plugins: {
       datalabels: {
         formatter: (value, context) => {
@@ -47,29 +48,39 @@ function StatsDashboard() {
           const percentage = ((value / total) * 100).toFixed(2); // Calculate percentage
           return `${percentage}%`; // Display percentage
         },
-        color: '#000', // Change text color to black
         font: {
-          weight: 'bold',
-          size: 14,
+          color: '#FFFFFF', // Ensure the text is white
+          weight: 'normal', // Make text not bold
+          size: 18, // Increase font size
         },
-        anchor: 'center',
-        align: 'center',
+        anchor: 'center', // Anchor at the center
+        align: 'center', // Align the label in the center
+        offset: 0, // Adjust this value to ensure the text is correctly positioned
+      },
+      legend: {
+        position: 'right', // Position the legend to the right
+        labels: {
+          color: '#FFFFFF', // Make legend text white
+          boxWidth: 20,
+          padding: 20,
+          font: {
+            weight: 'bold', // Make legend text bold
+            size: 16, // Increase legend text size
+          },
+        },
       },
     },
   };
+  
 
   return (
     <>
-      {/* Box 2 - Right Box with margin-right */}
-      <div className="w-40 h-22 md:w-50 bg-green-500 rounded-xl flex flex-col items-center justify-center text-white font-bold mr-4">
-        <span className="text-sm">Total Receipts</span> {/* Caption */}
-        <span className="text-3xl mt-2">{expenses.length}</span> {/* Number */}
-      </div>
-
       {/* Pie Chart Section */}
       <div className="flex justify-center mt-4">
-        <div className="w-80 h-80">
-          <Pie data={chartData} options={options} />
+        <div className="flex">
+          <div className="w-96 h-96"> {/* Increase size of Pie chart */}
+            <Pie data={chartData} options={options} />
+          </div>
         </div>
       </div>
     </>
