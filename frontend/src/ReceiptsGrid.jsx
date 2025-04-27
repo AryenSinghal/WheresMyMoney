@@ -79,7 +79,7 @@ const ReceiptsGrid = () => {
           <button
             key={cat}
             onClick={() => setSelectedCategory(cat)}
-            className={`px-4 py-2 rounded-full font-medium text-sm transition-colors ${
+            className={`px-4 py-2 rounded-full font-medium text-sm transition-colors cursor-pointer ${
               selectedCategory === cat
                 ? 'bg-purple-600 hover:bg-purple-400 active:bg-purple-800 text-white'
                 : 'bg-gray-200 text-gray-700 hover:bg-gray-400 active:bg-gray-600'
