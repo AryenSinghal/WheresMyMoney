@@ -21,9 +21,9 @@ function SemiCircleProgress({ spent, initialBudget }) {
   };
 
   return (
-    <div className="relative w-[200px] h-[200px] -mt-15 mx-auto">
-      <svg width="400" height="200" viewBox="0 0 600 250">
-        <g transform="translate(-80, 0) scale(1.2, 1)">
+    <div className="relative w-[400px] h-[200px] -mt-15 mx-auto">
+      <svg width="400" height="200" viewBox="0 0 400 250">
+        <g transform="translate(-10, 0) scale(1.2, 1)">
           <path
             d="M 25 175 A 150 150 0 0 1 325 175"
             fill="none"
@@ -63,14 +63,14 @@ function SemiCircleProgress({ spent, initialBudget }) {
 
       {/* Inner Labels (centered in arc) */}
       <div className="absolute top-16 left-1/2 transform -translate-x-1/2 text-center text-white">
-        <div className="text-lg font-medium mt-5">${spent} spent</div>
+        <div className="text-3xl font-medium mt-5">${spent} spent</div>
         <div className="text-md">{Math.round(percentage)}%</div>
       </div>
 
       {/* Edit Budget Button */}
       <button
         onClick={toggleEdit}
-        className="absolute bottom-6 left-1/2 transform translate-x-33 -translate-y-7 text-white bg-white/20 hover:bg-white/30 px-2 py-2 rounded-lg text-sm"
+        className="absolute bottom-6 left-1/2 transform translate-x-40 -translate-y-7 text-white bg-white/20 hover:bg-white/30 px-2 py-2 rounded-lg text-sm"
       >
         {isEditing ? "Save" : "Edit Budget"}
       </button>
