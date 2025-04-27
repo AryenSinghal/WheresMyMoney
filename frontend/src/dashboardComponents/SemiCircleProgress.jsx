@@ -96,7 +96,7 @@ function SemiCircleProgress({ spent, initialBudget }) {
 
       {/* Budget Input when editing */}
       {isEditing && (
-        <div className="absolute bottom-20 left-1/2 transform translate-x-15 text-center text-white">
+        <div className="absolute bottom-20 left-1/2 transform translate-x-1/2 text-center text-white">
           <input
             type="number"
             value={budget}

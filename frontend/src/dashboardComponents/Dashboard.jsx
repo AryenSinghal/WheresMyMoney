@@ -48,7 +48,7 @@ function Dashboard() {
                 onClick={toggleChart}
                 className="text-white bg-white/20 hover:bg-white/10 font-bold py-1 px-3 rounded"
               >
-                {isPieChart ? 'View to Yearly Spending' : 'View to Monthly Spending'}
+                {isPieChart ? 'View Yearly Spending' : 'View Monthly Spending'}
               </button>
             </div>
 
