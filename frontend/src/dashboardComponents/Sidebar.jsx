@@ -87,7 +87,7 @@ function Sidebar() {
       <button
         onClick={() => setIsOpen(true)}
         className="md:hidden fixed top-4 left-4 z-50 bg-white/10 backdrop-blur-md
-          transition-all duration-200 ease-in-out border border-white/20 rounded-xl shadow-lg text-white px-4 py-2 rounded-md hover:bg-purple-900 active:bg-purple-950"
+          transition-all duration-200 ease-in-out border border-white/20 rounded-xl shadow-lg text-white px-4 py-2 rounded-md hover:bg-purple-900 active:bg-purple-950 cursor-pointer"
       >
         ☰
       </button>
@@ -102,7 +102,7 @@ function Sidebar() {
 
       {/* Sidebar for mobile */}
       <div
-        className={`fixed top-0 left-0 h-full w-67 text-white p-6 z-50 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:hidden border-b-2 border-white`}
+        className={`fixed top-0 left-0 h-full w-67 text-white p-6 z-50 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:hidden border-b-2 border-white bg-slate-800`}
       >
         <h2 className="text-2xl font-bold mb-6">Where's My Money?</h2>
         <ul className="space-y-4">
@@ -112,7 +112,7 @@ function Sidebar() {
               className="hover:text-green-400"
               onClick={() => setIsOpen(false)}
             >
-              <button className={`text-white p-2 rounded-lg w-55 h-15 transition-all duration-200 ease-in-out ${isActive('/')}`}>
+              <button className={`text-white p-2 rounded-lg w-55 h-15 transition-all duration-200 ease-in-out hover:bg-purple-800 active:bg-purple-900 cursor-pointer ${isActive('/')}`}>
                 My Dashboard
               </button>
             </Link>
@@ -123,7 +123,7 @@ function Sidebar() {
               className="hover:text-green-400"
               onClick={() => setIsOpen(false)}
             >
-              <button className={`text-white p-2 rounded-lg w-55 h-15 transition-all duration-200 ease-in-out ${isActive('/receipts')}`}>
+              <button className={`text-white p-2 rounded-lg w-55 h-15 transition-all duration-200 ease-in-out cursor-pointer hover:bg-purple-800 active:bg-purple-900 ${isActive('/receipts')}`}>
                 Receipts
               </button>
             </Link>
@@ -131,7 +131,7 @@ function Sidebar() {
           <li className="relative">
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="text-white p-2 rounded-lg w-55 h-15 hover:bg-[#5900a1] active:bg-[#4a0080] outline transition-all duration-200 ease-in-out"
+              className="text-white p-2 rounded-lg w-55 h-15 hover:bg-[#5900a1] active:bg-[#4a0080] outline transition-all duration-200 ease-in-out cursor-pointer"
               disabled={isLoading || isEmailFetching}
             >
               {isLoading || isEmailFetching ? 'Processing...' : '+ Add Receipt'}
@@ -171,7 +171,7 @@ function Sidebar() {
         </ul>
         <button
           onClick={() => setIsOpen(false)}
-          className="absolute top-4 right-4 text-xl"
+          className="absolute top-4 right-4 text-xl cursor-pointer"
         >
           ✕
         </button>
@@ -184,14 +184,14 @@ function Sidebar() {
         <ul className="flex space-x-6 flex-grow justify-center ml-[-20px]">
           <li>
             <Link to="/" className="hover:text-green-400">
-              <button className={`text-white p-2 rounded-lg transition-all duration-200 ease-in-out ${isActive('/')}`}>
+              <button className={`text-white p-2 rounded-lg transition-all duration-200 ease-in-out hover:bg-purple-800 active:bg-purple-900 cursor-pointer ${isActive('/')}`}>
                 My Dashboard
               </button>
             </Link>
           </li>
           <li>
             <Link to="/receipts" className="hover:text-green-400">
-              <button className={`text-white p-2 rounded-lg transition-all duration-200 ease-in-out ${isActive('/receipts')}`}>
+              <button className={`text-white p-2 rounded-lg transition-all duration-200 ease-in-out hover:bg-purple-800 active:bg-purple-900 cursor-pointer ${isActive('/receipts')}`}>
                 Receipts
               </button>
             </Link>
