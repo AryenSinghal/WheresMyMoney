@@ -1,19 +1,18 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import CameraCapture from './CameraCapture';
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailFetching, setIsEmailFetching] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
   const location = useLocation();
 
   const isActive = (path) => location.pathname === path ? 'bg-[#5900a1] text-white' : '';
 
-  const handleFileUpload = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-
+  const handleFileUpload = async (file) => {
     setIsLoading(true);
     const formData = new FormData();
     formData.append('image', file);
@@ -28,7 +27,6 @@ function Sidebar() {
       
       if (response.ok) {
         alert(`Receipt processed successfully!\nMerchant: ${data.data.merchant_name}\nAmount: $${data.data.amount}\nCategory: ${data.data.category}`);
-        // Refresh the page to show new expense
         window.location.reload();
       } else {
         alert(`Error: ${data.error}`);
@@ -38,6 +36,14 @@ function Sidebar() {
     } finally {
       setIsLoading(false);
       setIsDropdownOpen(false);
+      setShowCamera(false);
+    }
+  };
+
+  const handleFileInputChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      handleFileUpload(file);
     }
   };
 
@@ -52,7 +58,6 @@ function Sidebar() {
       
       if (response.ok) {
         alert(`${data.message}\nProcessed ${data.data.length} receipts from email.`);
-        // Refresh the page to show new expenses
         window.location.reload();
       } else {
         alert(`Error: ${data.error}`);
@@ -65,20 +70,9 @@ function Sidebar() {
     }
   };
 
-  const openCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      // You would typically show a camera preview and capture functionality here
-      // For now, we'll just use a regular file input
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*';
-      input.capture = 'environment';
-      input.onchange = handleFileUpload;
-      input.click();
-    } catch (error) {
-      alert('Camera access denied. Please use file upload instead.');
-    }
+  const openCamera = () => {
+    setShowCamera(true);
+    setIsDropdownOpen(false);
   };
 
   return (
@@ -87,7 +81,7 @@ function Sidebar() {
       <button
         onClick={() => setIsOpen(true)}
         className="md:hidden fixed top-4 left-4 z-50 bg-white/10 backdrop-blur-md
-          transition-all duration-200 ease-in-out border border-white/20 rounded-xl shadow-lg text-white px-4 py-2 rounded-md hover:bg-purple-900 active:bg-purple-950"
+          transition-all duration-200 ease-in-out border border-white/20 rounded-xl shadow-lg text-white px-4 py-2 rounded-md hover:bg-purple-900 active:bg-purple-950 cursor-pointer"
       >
         ☰
       </button>
@@ -102,7 +96,7 @@ function Sidebar() {
 
       {/* Sidebar for mobile */}
       <div
-        className={`fixed top-0 left-0 h-full w-67 text-white p-6 z-50 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:hidden border-b-2 border-white`}
+        className={`fixed top-0 left-0 h-full w-67 text-white p-6 z-50 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:hidden border-b-2 border-white bg-slate-800`}
       >
         <h2 className="text-2xl font-bold mb-6">Where's My Money?</h2>
         <ul className="space-y-4">
@@ -112,7 +106,7 @@ function Sidebar() {
               className="hover:text-green-400"
               onClick={() => setIsOpen(false)}
             >
-              <button className={`text-white p-2 rounded-lg w-55 h-15 transition-all duration-200 ease-in-out ${isActive('/')}`}>
+              <button className={`text-white p-2 rounded-lg w-55 h-15 transition-all duration-200 ease-in-out hover:bg-purple-800 active:bg-purple-900 cursor-pointer ${isActive('/')}`}>
                 My Dashboard
               </button>
             </Link>
@@ -123,7 +117,7 @@ function Sidebar() {
               className="hover:text-green-400"
               onClick={() => setIsOpen(false)}
             >
-              <button className={`text-white p-2 rounded-lg w-55 h-15 transition-all duration-200 ease-in-out ${isActive('/receipts')}`}>
+              <button className={`text-white p-2 rounded-lg w-55 h-15 transition-all duration-200 ease-in-out cursor-pointer hover:bg-purple-800 active:bg-purple-900 ${isActive('/receipts')}`}>
                 Receipts
               </button>
             </Link>
@@ -131,7 +125,7 @@ function Sidebar() {
           <li className="relative">
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className="text-white p-2 rounded-lg w-55 h-15 hover:bg-[#5900a1] active:bg-[#4a0080] outline transition-all duration-200 ease-in-out"
+              className="text-white p-2 rounded-lg w-55 h-15 hover:bg-[#5900a1] active:bg-[#4a0080] outline transition-all duration-200 ease-in-out cursor-pointer"
               disabled={isLoading || isEmailFetching}
             >
               {isLoading || isEmailFetching ? 'Processing...' : '+ Add Receipt'}
@@ -144,7 +138,7 @@ function Sidebar() {
                       <input
                         type="file"
                         accept="image/*"
-                        onChange={handleFileUpload}
+                        onChange={handleFileInputChange}
                         className="hidden"
                       />
                       Upload Picture
@@ -171,7 +165,7 @@ function Sidebar() {
         </ul>
         <button
           onClick={() => setIsOpen(false)}
-          className="absolute top-4 right-4 text-xl"
+          className="absolute top-4 right-4 text-xl cursor-pointer"
         >
           ✕
         </button>
@@ -184,14 +178,14 @@ function Sidebar() {
         <ul className="flex space-x-6 flex-grow justify-center ml-[-20px]">
           <li>
             <Link to="/" className="hover:text-green-400">
-              <button className={`text-white p-2 rounded-lg transition-all duration-200 ease-in-out ${isActive('/')}`}>
+              <button className={`text-white p-2 rounded-lg transition-all duration-200 ease-in-out hover:bg-purple-800 active:bg-purple-900 cursor-pointer ${isActive('/')}`}>
                 My Dashboard
               </button>
             </Link>
           </li>
           <li>
             <Link to="/receipts" className="hover:text-green-400">
-              <button className={`text-white p-2 rounded-lg transition-all duration-200 ease-in-out ${isActive('/receipts')}`}>
+              <button className={`text-white p-2 rounded-lg transition-all duration-200 ease-in-out hover:bg-purple-800 active:bg-purple-900 cursor-pointer ${isActive('/receipts')}`}>
                 Receipts
               </button>
             </Link>
@@ -215,7 +209,7 @@ function Sidebar() {
                     <input
                       type="file"
                       accept="image/*"
-                      onChange={handleFileUpload}
+                      onChange={handleFileInputChange}
                       className="hidden"
                     />
                     Upload Picture
@@ -240,6 +234,14 @@ function Sidebar() {
           )}
         </div>
       </div>
+
+      {/* Camera Component */}
+      {showCamera && (
+        <CameraCapture
+          onCapture={handleFileUpload}
+          onClose={() => setShowCamera(false)}
+        />
+      )}
     </>
   );
 }

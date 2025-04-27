@@ -40,7 +40,7 @@ function SemiCircleProgress({ spent, initialBudget }) {
   };
 
   return (
-    <div className="relative w-[400px] h-[200px] -mt-15 mx-auto">
+    <div className="relative w-[400px] h-[200px] -mt-10 mx-auto">
       <svg width="400" height="200" viewBox="0 0 400 250">
         <g transform="translate(-10, 0) scale(1.2, 1)">
           <path
@@ -89,7 +89,7 @@ function SemiCircleProgress({ spent, initialBudget }) {
       {/* Edit Budget Button */}
       <button
         onClick={toggleEdit}
-        className="absolute bottom-6 left-1/2 transform translate-x-40 -translate-y-7 text-white bg-white/20 hover:bg-white/30 px-2 py-2 rounded-lg text-sm"
+        className="absolute bottom-6 left-1/2 transform translate-x-40 -translate-y-7 text-white bg-white/20 hover:bg-white/30 px-2 py-2 rounded-lg text-sm active:bg-gray-600 cursor-pointer"
       >
         {isEditing ? "Save" : "Edit Budget"}
       </button>
